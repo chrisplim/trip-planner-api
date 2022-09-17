@@ -11,6 +11,11 @@ config :trip_planner,
   ecto_repos: [TripPlanner.Repo],
   generators: [binary_id: true]
 
+config :trip_planner, TripPlanner.Repo,
+  start_apps_before_migration: [:ssl],
+  migration_primary_key: [name: :id, type: :binary_id],
+  migration_foreign_key: [column: :id, type: :binary_id]
+
 # Configures the endpoint
 config :trip_planner, TripPlannerWeb.Endpoint,
   url: [host: "localhost"],
@@ -25,10 +30,10 @@ config :trip_planner, TripPlannerWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :trip_planner, TripPlanner.Mailer, adapter: Swoosh.Adapters.Local
+# config :trip_planner, TripPlanner.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+# config :swoosh, :api_client, false
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -1,10 +1,10 @@
 import Config
 
 # Configure your database
+database_url = System.get_env("DATABASE_URL", "")
+
 config :trip_planner, TripPlanner.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
+  url: String.replace(database_url, "?", "dev"),
   database: "trip_planner_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,

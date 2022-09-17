@@ -1,0 +1,62 @@
+ARG BUILDER_IMAGE="hexpm/elixir:1.12.3-erlang-24.1.4-alpine-3.14.2"
+ARG RUNNER_IMAGE="alpine:3.13.3"
+
+FROM ${BUILDER_IMAGE} as builder
+
+RUN apk update --no-cache && \
+    apk upgrade --no-cache && \
+    apk add --no-cache \
+    make \
+    gcc \
+    musl-dev
+
+WORKDIR /app
+
+# install hex + rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# set build ENV
+ENV MIX_ENV="prod"
+
+# install mix dependencies
+COPY mix.exs mix.lock ./
+RUN mix deps.get --only $MIX_ENV
+RUN mkdir config
+
+# copy compile-time config files before we compile dependencies
+# to ensure any relevant config change will trigger the dependencies
+# to be re-compiled.
+COPY config/config.exs config/${MIX_ENV}.exs config/
+RUN mix deps.compile
+
+COPY priv priv
+
+# Compile the release
+COPY lib lib
+
+RUN mix compile
+
+RUN mix release
+
+# start a new build stage so that the final image will only contain
+# the compiled release and other runtime necessities
+FROM ${RUNNER_IMAGE}
+
+# ENV LANG en_US.UTF-8
+# ENV LANGUAGE en_US:en
+# ENV LC_ALL en_US.UTF-8
+
+WORKDIR /app
+
+# Install openssl
+RUN apk update && apk add openssl ncurses-libs libstdc++
+
+# Copy over the build artifact from the previous step and create a non root user
+RUN adduser -h /app -D app_user
+COPY --from=builder /app/_build .
+RUN chown -R app_user: ./prod
+USER app_user
+
+# Run the Phoenix app
+CMD ["./prod/rel/trip_planner/bin/trip_planner", "start"]

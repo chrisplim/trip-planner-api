@@ -1,15 +1,11 @@
 import Config
 
 # Configure your database
-#
-# The MIX_TEST_PARTITION environment variable can be used
-# to provide built-in test partitioning in CI environment.
-# Run `mix help test` for more information.
+database_url = System.get_env("DATABASE_URL", "")
+
 config :trip_planner, TripPlanner.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "trip_planner_test#{System.get_env("MIX_TEST_PARTITION")}",
+  url: String.replace(database_url, "?", "test"),
+  database: "trip_planner_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
@@ -21,7 +17,7 @@ config :trip_planner, TripPlannerWeb.Endpoint,
   server: false
 
 # In test we don't send emails.
-config :trip_planner, TripPlanner.Mailer, adapter: Swoosh.Adapters.Test
+# config :trip_planner, TripPlanner.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
 config :logger, level: :warn
