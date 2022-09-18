@@ -22,6 +22,7 @@ defmodule TripPlannerWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
+      import TripPlannerWeb.TestAuthHelper
       import TripPlannerWeb.ConnCase
 
       alias TripPlannerWeb.Router.Helpers, as: Routes

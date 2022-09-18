@@ -23,6 +23,22 @@ config :trip_planner, TripPlannerWeb.Endpoint,
   pubsub_server: TripPlanner.PubSub,
   live_view: [signing_salt: "fHG5mo2T"]
 
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
+
+config :trip_planner, TripPlannerWeb.Guardian,
+  allowed_algos: ["HS512"],
+  issuer: "trip_planner",
+  ttl: {30, :minutes},
+  allowed_drift: 2000,
+  verify_issuer: true,
+  secret_key: "fJNxKTWNxMqv9gjWA0Ou88Wfgxbil/JbZx9x3/l6zUurmV3DoJB+J+FfPHm35q7A"
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

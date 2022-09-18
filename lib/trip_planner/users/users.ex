@@ -26,16 +26,16 @@ defmodule TripPlanner.Users do
     |> Repo.update()
   end
 
-  # def get_user_profile(user_id) do
-  #   query =
-  #     from(user in User,
-  #       where: user.id == ^user_id,
-  #       preload: [:medical_recommendation, :government_id]
-  #     )
+  def get_user_profile(user_id) do
+    query =
+      from(user in User,
+        where: user.id == ^user_id
+        # preload: [:government_id]
+      )
 
-  #   case Repo.one(query) do
-  #     nil -> {:error, :not_found}
-  #     user -> {:ok, user}
-  #   end
-  # end
+    case Repo.one(query) do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
 end
