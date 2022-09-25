@@ -1,9 +1,8 @@
 defmodule TripPlanner.Schemas.User do
   use TripPlanner.Schema
   import Ecto.Changeset
+  alias TripPlanner.Schemas.Trip
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
   schema "users" do
     field(:first_name, :string)
     field(:last_name, :string)
@@ -13,6 +12,11 @@ defmodule TripPlanner.Schemas.User do
     field(:email, :string)
     field(:phone, :string)
     field(:jwt_refresh_token, :string)
+
+    many_to_many(:trips, Trip,
+      join_through: "users_trips"
+      # on_replace: :delete
+    )
 
     timestamps(type: :utc_datetime)
   end

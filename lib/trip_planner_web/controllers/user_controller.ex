@@ -5,7 +5,7 @@ defmodule TripPlannerWeb.UserController do
 
   alias TripPlanner.Auth.Auth
   alias TripPlanner.Schemas.User
-  alias TripPlanner.Users
+  alias TripPlanner.Users.Users
   alias TripPlannerWeb.FallbackController
 
   action_fallback(FallbackController)

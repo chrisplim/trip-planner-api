@@ -5,7 +5,7 @@ defmodule TripPlannerWeb.SessionController do
 
   alias TripPlanner.Auth.Auth
   alias TripPlanner.Schemas.User
-  alias TripPlanner.Users
+  alias TripPlanner.Users.Users
   alias TripPlannerWeb.FallbackController
   alias TripPlannerWeb.Guardian
   alias TripPlannerWeb.UserView
@@ -17,7 +17,7 @@ defmodule TripPlannerWeb.SessionController do
   """
   def login_operation() do
     %Operation{
-      tags: ["users"],
+      tags: ["sessions"],
       summary: "Login",
       description: "Login",
       operationId: "SessionController.login",
@@ -54,7 +54,7 @@ defmodule TripPlannerWeb.SessionController do
   """
   def refresh_token_operation() do
     %Operation{
-      tags: ["users"],
+      tags: ["sessions"],
       summary: "Refresh the current user's auth tokens",
       description: "Refresh the current user's auth tokens",
       operationId: "SessionController.refresh_token",

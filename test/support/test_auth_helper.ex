@@ -6,7 +6,7 @@ defmodule TripPlannerWeb.TestAuthHelper do
   import TripPlanner.Factory
 
   alias TripPlanner.Auth.Auth
-  alias TripPlanner.Users
+  alias TripPlanner.Users.Users
 
   def authenticate(conn = %Plug.Conn{}, user \\ insert(:user)) do
     {:ok, %{access_token: access_token, refresh_token: refresh_token}} =

@@ -1,4 +1,4 @@
-defmodule TripPlanner.Users do
+defmodule TripPlanner.Users.Users do
   @moduledoc """
   Context file for Users
   """

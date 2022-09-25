@@ -1,7 +1,7 @@
 defmodule TripPlannerWeb.Guardian do
   use Guardian, otp_app: :trip_planner
 
-  alias TripPlanner.Users
+  alias TripPlanner.Users.Users
   alias TripPlanner.Schemas.User
 
   def subject_for_token(%User{} = user, _claims) do

@@ -58,8 +58,6 @@ defmodule TripPlannerWeb.Router do
       get("/me", UserController, :get_user_me)
     end
 
-    # post("/government_ids", GovernmentIdController, :create_government_id)
-    # put("/government_ids", GovernmentIdController, :update_government_id)
-    # delete("/government_ids", GovernmentIdController, :delete_government_id)
+    resources "/trips", TripController, only: [:index, :create, :show, :update, :delete]
   end
 end

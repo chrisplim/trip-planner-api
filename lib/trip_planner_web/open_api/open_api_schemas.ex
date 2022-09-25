@@ -147,4 +147,71 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
       }
     })
   end
+
+  defmodule TripResponse do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Current User information",
+      type: :object,
+      properties: %{
+        id: %Schema{type: :string, format: :uuid, description: "Trip ID"},
+        name: %Schema{
+          type: :string,
+          description: "Name"
+        },
+        description: %Schema{
+          type: :string,
+          description: "Description"
+        },
+        start_date: %Schema{
+          type: :string,
+          format: :date,
+          description: "Start Date"
+        },
+        end_date: %Schema{
+          type: :string,
+          format: :date,
+          description: "End Date"
+        },
+        owner: UserResponse
+      },
+      example: %{
+        "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
+        "name" => "Hawaii Trip",
+        "description" => "Let's have fun",
+        # TODO figure out what the dates look like
+        "start_date" => "",
+        "end_date" => "",
+        "owner" => %{
+          "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
+          "first_name" => "Joe",
+          "last_name" => "Bruin",
+          "username" => "joebruin",
+          "email" => "joebruin@gmail.com",
+          "phone" => "3101234567"
+        }
+      }
+    })
+  end
+
+  defmodule TripsResponse do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Current User information",
+      type: :array,
+      items: TripResponse
+    })
+  end
+
+  defmodule OkResponse do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "200 OK response",
+      type: :string,
+      example: "OK"
+    })
+  end
 end
