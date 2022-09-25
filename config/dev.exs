@@ -62,3 +62,5 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :open_api_spex, :cache_adapter, OpenApiSpex.Plug.NoneCache
+
+config :trip_planner, load_dot_env: true
