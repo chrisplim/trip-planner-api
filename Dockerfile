@@ -1,5 +1,10 @@
-FROM hexpm/elixir:1.12.3-erlang-24.1.4-alpine-3.14.2
-# FROM elixir:1.14.0-alpine
+ARG ELIXIR_VERSION=1.14.0
+ARG OTP_VERSION=25.0.4
+ARG DISTRIBUTION=alpine
+ARG DISTRIBUTION_VERSION=3.16.1
+
+ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-${DISTRIBUTION}-${DISTRIBUTION_VERSION}"
+FROM ${BUILDER_IMAGE}
 
 RUN apk update --no-cache && \
     apk upgrade --no-cache && \

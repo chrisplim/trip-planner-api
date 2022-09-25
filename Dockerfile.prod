@@ -1,5 +1,10 @@
-ARG BUILDER_IMAGE="hexpm/elixir:1.12.3-erlang-24.1.4-alpine-3.14.2"
-ARG RUNNER_IMAGE="alpine:3.13.3"
+ARG ELIXIR_VERSION=1.14.0
+ARG OTP_VERSION=25.0.4
+ARG DISTRIBUTION=alpine
+ARG DISTRIBUTION_VERSION=3.16.1
+
+ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-${DISTRIBUTION}-${DISTRIBUTION_VERSION}"
+ARG RUNNER_IMAGE="${DISTRIBUTION}:${DISTRIBUTION_VERSION}"
 
 FROM ${BUILDER_IMAGE} as builder
 
@@ -32,31 +37,40 @@ RUN mix deps.compile
 
 COPY priv priv
 
-# Compile the release
 COPY lib lib
 
+# Compile the release
 RUN mix compile
 
+# Changes to config/runtime.exs don't require recompiling the code
+COPY config/runtime.exs config/
+
+COPY rel rel
 RUN mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-# ENV LANG en_US.UTF-8
-# ENV LANGUAGE en_US:en
-# ENV LC_ALL en_US.UTF-8
+# Install openssl
+RUN apk update \
+    && apk add openssl ncurses-libs libstdc++ \
+    && rm -rf /var/cache/apk/*
+
+# Set the locale
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 WORKDIR /app
+RUN chown nobody /app
 
-# Install openssl
-RUN apk update && apk add openssl ncurses-libs libstdc++
+# set runner ENV
+ENV MIX_ENV="prod"
 
-# Copy over the build artifact from the previous step and create a non root user
-RUN adduser -h /app -D app_user
-COPY --from=builder /app/_build .
-RUN chown -R app_user: ./prod
-USER app_user
+# Only copy the final release from the build stage
+COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/trip_planner ./
 
-# Run the Phoenix app
-CMD ["./prod/rel/trip_planner/bin/trip_planner", "start"]
+USER nobody
+
+CMD ["/app/bin/server"]

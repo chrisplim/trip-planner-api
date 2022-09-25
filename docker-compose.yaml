@@ -17,7 +17,7 @@ services:
     environment:
       MIX_ENV: dev
     env_file:
-      - .env
+      - .env.docker-compose
     ports:
       - '4000:4000'
     volumes:
