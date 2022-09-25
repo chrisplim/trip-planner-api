@@ -7,6 +7,7 @@ defmodule TripPlanner.Application do
 
   @impl true
   def start(_type, _args) do
+    # Don't set this in production releases because Mix is not available
     if Application.get_env(:trip_planner, :load_dot_env) do
       Dotenv.load()
       Mix.Task.run("loadconfig")
