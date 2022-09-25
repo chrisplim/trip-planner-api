@@ -7,7 +7,7 @@ defmodule TripPlanner.Application do
 
   @impl true
   def start(_type, _args) do
-    unless Mix.env() == :prod do
+    if Application.get_env(:trip_planner, :load_dot_env) do
       Dotenv.load()
       Mix.Task.run("loadconfig")
     end
