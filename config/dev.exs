@@ -10,6 +10,7 @@ config :trip_planner, TripPlanner.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+# Application.get_env(:trip_planner, :url)
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
@@ -59,3 +60,5 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :open_api_spex, :cache_adapter, OpenApiSpex.Plug.NoneCache

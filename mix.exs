@@ -46,7 +46,11 @@ defmodule TripPlanner.MixProject do
       {:guardian, "~> 2.0"},
       {:argon2_elixir, "~> 2.0"},
       {:ex_machina, "~> 2.7.0", only: :test},
-      {:faker, "~> 0.17", only: :test}
+      {:faker, "~> 0.17", only: :test},
+      {:benchee, "~> 1.0", only: :dev},
+      {:uuid, "~> 1.1"},
+      {:open_api_spex, "~> 3.13"},
+      {:ymlr, "~> 2.0"}
     ]
   end
 
@@ -61,7 +65,9 @@ defmodule TripPlanner.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "openapi.json": ["openapi.spec.json --spec TripPlannerWeb.OpenApi.OpenApiSpec"],
+      "openapi.yaml": ["openapi.spec.yaml --spec TripPlannerWeb.OpenApi.OpenApiSpec"]
     ]
   end
 end

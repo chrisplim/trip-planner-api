@@ -3,6 +3,15 @@ defmodule TripPlannerWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug OpenApiSpex.Plug.PutApiSpec, module: TripPlannerWeb.OpenApi.OpenApiSpec
+  end
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
   end
 
   pipeline :parsed_body do
@@ -17,16 +26,24 @@ defmodule TripPlannerWeb.Router do
     plug(TripPlannerWeb.CurrentUserPlug)
   end
 
-  scope "/api", TripPlannerWeb do
+  scope "/" do
+    pipe_through :browser
+
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
+  end
+
+  scope "/api" do
     pipe_through([:parsed_body, :api])
 
     scope "/sessions" do
-      post("/login", SessionController, :login)
+      post("/login", TripPlannerWeb.SessionController, :login)
     end
 
     scope "/users" do
-      post("/register", UserController, :register_user)
+      post("/register", TripPlannerWeb.UserController, :register_user)
     end
+
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
   # Authed endpoints
@@ -45,16 +62,4 @@ defmodule TripPlannerWeb.Router do
     # put("/government_ids", GovernmentIdController, :update_government_id)
     # delete("/government_ids", GovernmentIdController, :delete_government_id)
   end
-
-  # Enables the Swoosh mailbox preview in development.
-  #
-  # Note that preview only shows emails that were sent by the same
-  # node running the Phoenix server.
-  # if Mix.env() == :dev do
-  #   scope "/dev" do
-  #     pipe_through [:fetch_session, :protect_from_forgery]
-
-  #     forward "/mailbox", Plug.Swoosh.MailboxPreview
-  #   end
-  # end
 end

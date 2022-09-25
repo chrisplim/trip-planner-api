@@ -17,3 +17,4 @@ npm-debug.log
 
 .elixir_ls/
 
+benchee.exs

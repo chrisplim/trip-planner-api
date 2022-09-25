@@ -1,6 +1,7 @@
 defmodule TripPlannerWeb.SessionController do
   use TripPlannerWeb, :controller
   use TripPlannerWeb.CurrentUser
+  use TripPlannerWeb.OpenApi.OpenApiOperation
 
   alias TripPlanner.Auth.Auth
   alias TripPlanner.Schemas.User
@@ -11,6 +12,33 @@ defmodule TripPlannerWeb.SessionController do
 
   action_fallback(FallbackController)
 
+  @doc """
+  OpenApi spec for the login action
+  """
+  def login_operation() do
+    %Operation{
+      tags: ["users"],
+      summary: "Login",
+      description: "Login",
+      operationId: "SessionController.login",
+      requestBody:
+        request_body(
+          "The attributes needed to login",
+          "application/json",
+          OpenApiSchemas.LoginRequest,
+          required: true
+        ),
+      responses: %{
+        200 =>
+          response(
+            "User info and Auth tokens",
+            "application/json",
+            OpenApiSchemas.UserAuthResponse
+          )
+      }
+    }
+  end
+
   def login(conn, %{"username" => username, "password" => password}, _) do
     with {:ok, user} <- Auth.authenticate_user(username, password),
          {:ok, tokens} <- Auth.create_tokens_for_user(user),
@@ -19,6 +47,27 @@ defmodule TripPlannerWeb.SessionController do
       |> put_view(UserView)
       |> render("user_auth.json", %{user: user, tokens: tokens})
     end
+  end
+
+  @doc """
+  OpenApi spec for the get_user_me action
+  """
+  def refresh_token_operation() do
+    %Operation{
+      tags: ["users"],
+      summary: "Refresh the current user's auth tokens",
+      description: "Refresh the current user's auth tokens",
+      operationId: "SessionController.refresh_token",
+      security: [%{"authorization" => []}],
+      responses: %{
+        200 =>
+          response(
+            "Auth tokens",
+            "application/json",
+            OpenApiSchemas.TokensResponse
+          )
+      }
+    }
   end
 
   def refresh_token(
