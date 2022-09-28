@@ -5,7 +5,7 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
     require OpenApiSpex
 
     OpenApiSpex.schema(%{
-      description: "Current user information",
+      description: "User information",
       type: :object,
       properties: %{
         first_name: %Schema{
@@ -148,6 +148,99 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
     })
   end
 
+  defmodule RefreshTokenRequest do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Refresh token request body",
+      type: :object,
+      properties: %{
+        refresh_token: %Schema{
+          type: :string,
+          description: "Refresh token to get a new refresh token"
+        }
+      },
+      required: [:refresh_token],
+      example: %{
+        "refresh_token" => "<refresh_token>"
+      }
+    })
+  end
+
+  defmodule NewTripRequest do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Trip information",
+      type: :object,
+      properties: %{
+        name: %Schema{
+          type: :string,
+          description: "Name",
+          pattern: ~r/[a-zA-Z]+/
+        },
+        description: %Schema{
+          type: :string,
+          description: "Description",
+          pattern: ~r/[a-zA-Z]*/
+        },
+        start_date: %Schema{
+          type: :integer,
+          description: "Start Date",
+          format: :date
+        },
+        end_date: %Schema{
+          type: :integer,
+          description: "End Date",
+          format: :date
+        }
+      },
+      required: [:name],
+      example: %{
+        "name" => "Hawaii",
+        "description" => "Let's go to Hawaii",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123
+      }
+    })
+  end
+
+  defmodule UpdateTripRequest do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Update Trip information",
+      type: :object,
+      properties: %{
+        name: %Schema{
+          type: :string,
+          description: "Name",
+          pattern: ~r/[a-zA-Z]+/
+        },
+        description: %Schema{
+          type: :string,
+          description: "Description",
+          pattern: ~r/[a-zA-Z]*/
+        },
+        start_date: %Schema{
+          type: :integer,
+          description: "Start Date"
+        },
+        end_date: %Schema{
+          type: :integer,
+          description: "End Date"
+        }
+      },
+      required: [],
+      example: %{
+        "name" => "New Hawaii",
+        "description" => "Let's go to New Hawaii",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123
+      }
+    })
+  end
+
   defmodule TripResponse do
     require OpenApiSpex
 
@@ -165,13 +258,11 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
           description: "Description"
         },
         start_date: %Schema{
-          type: :string,
-          format: :date,
+          type: :integer,
           description: "Start Date"
         },
         end_date: %Schema{
-          type: :string,
-          format: :date,
+          type: :integer,
           description: "End Date"
         },
         owner: UserResponse
@@ -180,9 +271,8 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
         "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
         "name" => "Hawaii Trip",
         "description" => "Let's have fun",
-        # TODO figure out what the dates look like
-        "start_date" => "",
-        "end_date" => "",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123,
         "owner" => %{
           "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
           "first_name" => "Joe",

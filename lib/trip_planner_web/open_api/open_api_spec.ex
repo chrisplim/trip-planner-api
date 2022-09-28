@@ -17,7 +17,15 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSpec do
       # Populate the paths from a phoenix router
       paths: Paths.from_router(Router),
       components: %Components{
-        securitySchemes: %{"authorization" => %SecurityScheme{type: "http", scheme: "bearer"}}
+        securitySchemes: %{
+          "authorization" => %SecurityScheme{
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+            description:
+              "Token must be provided in the headers via `Authorization: Bearer <token>`"
+          }
+        }
       }
     }
     # Discover request/response schemas from path specs

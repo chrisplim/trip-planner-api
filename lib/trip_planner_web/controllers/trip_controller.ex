@@ -46,6 +46,13 @@ defmodule TripPlannerWeb.TripController do
       description: "Create a trip",
       operationId: "TripController.create",
       security: [%{"authorization" => []}],
+      requestBody:
+        request_body(
+          "The attributes needed to create a new trip",
+          "application/json",
+          OpenApiSchemas.NewTripRequest,
+          required: true
+        ),
       responses: %{
         200 =>
           response(
@@ -101,6 +108,13 @@ defmodule TripPlannerWeb.TripController do
       description: "Update a specific trip",
       operationId: "TripController.update",
       security: [%{"authorization" => []}],
+      requestBody:
+        request_body(
+          "The attributes needed to update a trip",
+          "application/json",
+          OpenApiSchemas.UpdateTripRequest,
+          required: true
+        ),
       responses: %{
         200 =>
           response(
