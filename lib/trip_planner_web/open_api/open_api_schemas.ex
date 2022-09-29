@@ -179,13 +179,11 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
         },
         start_date: %Schema{
           type: :integer,
-          description: "Start Date",
-          format: :date
+          description: "Start Date"
         },
         end_date: %Schema{
           type: :integer,
-          description: "End Date",
-          format: :date
+          description: "End Date"
         }
       },
       required: [:name],
