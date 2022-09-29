@@ -33,6 +33,15 @@ defmodule TripPlannerWeb.FallbackController do
     |> render("403.json")
   end
 
+  def call(conn, {:error, :not_found}) do
+    Logger.error("[FallbackController] NotFound")
+
+    conn
+    |> put_status(:not_found)
+    |> put_view(ErrorView)
+    |> render("404.json")
+  end
+
   # For Ecto Changesets
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     Logger.error("[FallbackController] Changeset Error: #{inspect(changeset)}")
