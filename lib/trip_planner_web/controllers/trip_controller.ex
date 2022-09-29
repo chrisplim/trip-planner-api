@@ -80,6 +80,14 @@ defmodule TripPlannerWeb.TripController do
       description: "Get a trip by an ID",
       operationId: "TripController.show",
       security: [%{"authorization" => []}],
+      parameters: [
+        %Parameter{
+          name: "trip_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.TripIdPathParameter
+        }
+      ],
       responses: %{
         200 =>
           response(
@@ -108,12 +116,20 @@ defmodule TripPlannerWeb.TripController do
       description: "Update a specific trip",
       operationId: "TripController.update",
       security: [%{"authorization" => []}],
+      parameters: [
+        %Parameter{
+          name: "trip_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.TripIdPathParameter
+        }
+      ],
       requestBody:
         request_body(
           "The attributes needed to update a trip",
           "application/json",
           OpenApiSchemas.UpdateTripRequest,
-          required: true
+          required: false
         ),
       responses: %{
         200 =>
@@ -144,6 +160,14 @@ defmodule TripPlannerWeb.TripController do
       description: "Delete a specific trip",
       operationId: "TripController.delete",
       security: [%{"authorization" => []}],
+      parameters: [
+        %Parameter{
+          name: "trip_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.TripIdPathParameter
+        }
+      ],
       responses: %{
         200 =>
           response(

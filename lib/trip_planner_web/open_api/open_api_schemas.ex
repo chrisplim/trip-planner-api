@@ -1,9 +1,8 @@
 defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   alias OpenApiSpex.Schema
+  require OpenApiSpex
 
   defmodule RegisterUserRequest do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "User information",
       type: :object,
@@ -44,8 +43,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule UserResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Current user information",
       type: :object,
@@ -81,8 +78,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule TokensResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Authentication tokens",
       type: :object,
@@ -98,8 +93,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule UserAuthResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "User and authentication information",
       type: :object,
@@ -111,8 +104,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule CurrentUserResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Current User information",
       type: :object,
@@ -123,8 +114,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule LoginRequest do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Login request body",
       type: :object,
@@ -149,8 +138,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule RefreshTokenRequest do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Refresh token request body",
       type: :object,
@@ -167,9 +154,15 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
     })
   end
 
-  defmodule NewTripRequest do
-    require OpenApiSpex
+  defmodule TripIdPathParameter do
+    OpenApiSpex.schema(%{
+      description: "Trip id",
+      type: :string,
+      example: "3a8c6f21-0fac-4705-98c3-e1f7d5e2cd6d"
+    })
+  end
 
+  defmodule NewTripRequest do
     OpenApiSpex.schema(%{
       description: "Trip information",
       type: :object,
@@ -206,8 +199,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule UpdateTripRequest do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Update Trip information",
       type: :object,
@@ -231,7 +222,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
           description: "End Date"
         }
       },
-      required: [],
       example: %{
         "name" => "New Hawaii",
         "description" => "Let's go to New Hawaii",
@@ -242,8 +232,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule TripResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Current User information",
       type: :object,
@@ -286,8 +274,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule TripsResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "Current User information",
       type: :array,
@@ -296,8 +282,6 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
   end
 
   defmodule OkResponse do
-    require OpenApiSpex
-
     OpenApiSpex.schema(%{
       description: "200 OK response",
       type: :string,

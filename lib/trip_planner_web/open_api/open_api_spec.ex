@@ -12,7 +12,8 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSpec do
       ],
       info: %Info{
         title: to_string(Application.spec(:trip_planner, :description)),
-        version: to_string(Application.spec(:trip_planner, :vsn))
+        version: to_string(Application.spec(:trip_planner, :vsn)),
+        description: "The API for the Trip Planner App"
       },
       # Populate the paths from a phoenix router
       paths: Paths.from_router(Router),

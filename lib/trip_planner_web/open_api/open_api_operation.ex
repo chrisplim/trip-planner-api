@@ -5,6 +5,7 @@ defmodule TripPlannerWeb.OpenApi.OpenApiOperation do
   defmacro __using__(_) do
     quote do
       alias OpenApiSpex.Operation
+      alias OpenApiSpex.Parameter
       alias TripPlannerWeb.OpenApi.OpenApiSchemas
       import OpenApiSpex.Operation, only: [parameter: 5, request_body: 4, response: 3]
 
