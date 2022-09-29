@@ -59,6 +59,13 @@ defmodule TripPlannerWeb.SessionController do
       description: "Refresh the current user's auth tokens",
       operationId: "SessionController.refresh_token",
       security: [%{"authorization" => []}],
+      requestBody:
+        request_body(
+          "The attributes needed to refresh a token",
+          "application/json",
+          OpenApiSchemas.RefreshTokenRequest,
+          required: true
+        ),
       responses: %{
         200 =>
           response(

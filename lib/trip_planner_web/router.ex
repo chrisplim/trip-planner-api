@@ -1,9 +1,12 @@
 defmodule TripPlannerWeb.Router do
   use TripPlannerWeb, :router
 
+  # alias TripPlannerWeb.Plugs.DateParamsParserPlug
+
   pipeline :api do
     plug :accepts, ["json"]
     plug OpenApiSpex.Plug.PutApiSpec, module: TripPlannerWeb.OpenApi.OpenApiSpec
+    # plug DateParamsParserPlug
   end
 
   pipeline :browser do
@@ -29,7 +32,7 @@ defmodule TripPlannerWeb.Router do
   scope "/" do
     pipe_through :browser
 
-    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
+    get "/openapi", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
   end
 
   scope "/api" do
@@ -58,6 +61,8 @@ defmodule TripPlannerWeb.Router do
       get("/me", UserController, :get_user_me)
     end
 
-    resources "/trips", TripController, only: [:index, :create, :show, :update, :delete]
+    resources "/trips", TripController,
+      only: [:index, :create, :show, :update, :delete],
+      param: "trip_id"
   end
 end

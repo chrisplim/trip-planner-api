@@ -14,8 +14,8 @@ defmodule TripPlanner.Schemas.User do
     field(:jwt_refresh_token, :string)
 
     many_to_many(:trips, Trip,
-      join_through: "users_trips"
-      # on_replace: :delete
+      join_through: "users_trips",
+      on_replace: :delete
     )
 
     timestamps(type: :utc_datetime)
