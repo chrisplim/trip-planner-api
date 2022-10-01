@@ -7,8 +7,8 @@ defmodule TripPlanner.Repo.Migrations.AddIndexesUsersTrips do
     flush()
 
     create table(:users_trips, primary_key: false) do
-      add(:user_id, references("users"), null: false, primary_key: true, on_delete: :delete_all)
-      add(:trip_id, references("trips"), null: false, primary_key: true, on_delete: :delete_all)
+      add(:user_id, references("users", on_delete: :delete_all), null: false, primary_key: true)
+      add(:trip_id, references("trips", on_delete: :delete_all), null: false, primary_key: true)
     end
 
     create(index(:users_trips, :user_id))

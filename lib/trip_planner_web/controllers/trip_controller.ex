@@ -4,6 +4,7 @@ defmodule TripPlannerWeb.TripController do
   use TripPlannerWeb.OpenApi.OpenApiOperation
 
   alias TripPlanner.Schemas.User
+  alias TripPlanner.Trips.TripPolicy
   alias TripPlanner.Trips.Trips
   alias TripPlannerWeb.FallbackController
 
@@ -30,8 +31,8 @@ defmodule TripPlannerWeb.TripController do
     }
   end
 
-  def index(conn, _, %User{} = current_user) do
-    with {:ok, trips} <- Trips.get_all_trips_including_user(current_user) do
+  def index(conn, _, %User{} = user) do
+    with {:ok, trips} <- Trips.get_all_trips_including_user(user) do
       render(conn, "trips.json", %{trips: trips})
     end
   end
@@ -64,8 +65,8 @@ defmodule TripPlannerWeb.TripController do
     }
   end
 
-  def create(conn, attrs, %User{} = current_user) do
-    with {:ok, trip} <- Trips.create_trip(current_user, attrs) do
+  def create(conn, attrs, %User{} = user) do
+    with {:ok, trip} <- Trips.create_trip(user, attrs) do
       render(conn, "trip.json", %{trip: trip})
     end
   end
@@ -99,9 +100,9 @@ defmodule TripPlannerWeb.TripController do
     }
   end
 
-  def show(conn, %{"trip_id" => trip_id}, %User{} = _current_user) do
-    # TODO can user see this trip?
-    with {:ok, trip} <- Trips.get_trip(trip_id) do
+  def show(conn, %{"trip_id" => trip_id}, %User{} = user) do
+    with {:ok, trip} <- Trips.get_trip(trip_id),
+         :ok <- Bodyguard.permit(TripPolicy, :see_trip, user, trip) do
       render(conn, "trip.json", %{trip: trip})
     end
   end
@@ -142,9 +143,9 @@ defmodule TripPlannerWeb.TripController do
     }
   end
 
-  def update(conn, %{"trip_id" => trip_id} = attrs, %User{} = _current_user) do
-    # TODO can user get+update this trip?
+  def update(conn, %{"trip_id" => trip_id} = attrs, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
+         :ok <- Bodyguard.permit(TripPolicy, :update_trip, user, trip),
          {:ok, trip} <- Trips.update_trip(trip, attrs) do
       render(conn, "trip.json", %{trip: trip})
     end
@@ -179,9 +180,9 @@ defmodule TripPlannerWeb.TripController do
     }
   end
 
-  def delete(conn, %{"trip_id" => trip_id}, %User{} = _current_user) do
-    # TODO can user delete this trip?
+  def delete(conn, %{"trip_id" => trip_id}, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
+         :ok <- Bodyguard.permit(TripPolicy, :delete_trip, user, trip),
          {:ok, _} <- Trips.delete_trip(trip) do
       conn |> send_resp(200, "OK")
     end
