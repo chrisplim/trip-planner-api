@@ -14,4 +14,7 @@ defmodule TripPlanner.Repo.Migrations.AddIndexesUsersTrips do
     create(index(:users_trips, :user_id))
     create(index(:users_trips, :trip_id))
   end
+
+  def down do
+  end
 end
