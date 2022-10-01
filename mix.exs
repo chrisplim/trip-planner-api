@@ -50,7 +50,8 @@ defmodule TripPlanner.MixProject do
       {:benchee, "~> 1.0", only: :dev},
       {:uuid, "~> 1.1"},
       {:open_api_spex, "~> 3.13"},
-      {:ymlr, "~> 2.0"}
+      {:ymlr, "~> 2.0"},
+      {:bodyguard, "~> 2.4"}
     ]
   end
 

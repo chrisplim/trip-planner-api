@@ -30,7 +30,7 @@ defmodule TripPlanner.Trips.Trips do
     query =
       from(trip in Trip,
         where: trip.id == type(^trip_id, :binary_id),
-        preload: [:user]
+        preload: [:user, :users]
       )
 
     case Repo.one(query) do
