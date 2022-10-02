@@ -51,7 +51,10 @@ defmodule TripPlanner.MixProject do
       {:uuid, "~> 1.1"},
       {:open_api_spex, "~> 3.13"},
       {:ymlr, "~> 2.0"},
-      {:bodyguard, "~> 2.4"}
+      {:bodyguard, "~> 2.4"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:credo_envvar, "~> 0.1", only: [:dev, :test], runtime: false},
+      {:credo_naming, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -67,8 +70,8 @@ defmodule TripPlanner.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "openapi.json": ["openapi.spec.json --spec TripPlannerWeb.OpenApi.OpenApiSpec"],
-      "openapi.yaml": ["openapi.spec.yaml --spec TripPlannerWeb.OpenApi.OpenApiSpec"]
+      "openapi.json": ["openapi.spec.json --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec"],
+      "openapi.yaml": ["openapi.spec.yaml --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec"]
     ]
   end
 end

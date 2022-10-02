@@ -1,10 +1,13 @@
 defmodule TripPlanner.TypeConversions.DateTimeConverter do
+  @moduledoc """
+  Module for converting integers to elixir DateTimes
+  """
   alias TripPlanner.TypeConversions.NumberConverter
 
   @spec from_timestamp(any(), Keyword.t()) ::
           {:ok, DateTime.t()} | {:ok, any()} | {:error, atom()}
   def from_timestamp(timestamp, opts \\ []) do
-    unit = Keyword.get(opts, :unit, :millisecond)
+    unit = Keyword.get(opts, :unit, :second)
 
     with {:ok, int_timestamp} <- NumberConverter.to_int(timestamp),
          {:ok, datetime} <- DateTime.from_unix(int_timestamp, unit) do
@@ -19,7 +22,7 @@ defmodule TripPlanner.TypeConversions.DateTimeConverter do
   end
 
   # DateTime to integer
-  def to_integer(datetime, unit \\ :millisecond, default \\ nil)
+  def to_integer(datetime, unit \\ :second, default \\ nil)
 
   def to_integer(%DateTime{} = d, unit, _default) do
     DateTime.to_unix(d, unit)

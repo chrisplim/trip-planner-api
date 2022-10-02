@@ -1,7 +1,7 @@
-defmodule TripPlannerWeb.UserController do
+defmodule TripPlannerWeb.V1.Users.UserController do
   use TripPlannerWeb, :controller
   use TripPlannerWeb.CurrentUser
-  use TripPlannerWeb.OpenApi.OpenApiOperation
+  use TripPlannerWeb.V1.OpenApi.OpenApiOperation
 
   alias TripPlanner.Auth.Auth
   alias TripPlanner.Schemas.User
@@ -13,7 +13,7 @@ defmodule TripPlannerWeb.UserController do
   @doc """
   OpenApi spec for the register_user action
   """
-  def register_user_operation() do
+  def register_user_operation do
     %Operation{
       tags: ["users"],
       summary: "Register new user",
@@ -48,7 +48,7 @@ defmodule TripPlannerWeb.UserController do
   @doc """
   OpenApi spec for the get_user_me action
   """
-  def get_user_me_operation() do
+  def get_user_me_operation do
     %Operation{
       tags: ["users"],
       summary: "Get current user information",

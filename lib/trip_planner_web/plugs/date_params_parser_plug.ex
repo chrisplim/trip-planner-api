@@ -1,4 +1,7 @@
 defmodule TripPlannerWeb.Plugs.DateParamsParserPlug do
+  @moduledoc """
+  Plug to parse date related fields in request bodies
+  """
   import Plug.Conn
 
   alias TripPlanner.TypeConversions.DateTimeConverter

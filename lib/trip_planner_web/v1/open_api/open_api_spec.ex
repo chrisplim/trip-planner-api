@@ -1,11 +1,21 @@
-defmodule TripPlannerWeb.OpenApi.OpenApiSpec do
-  alias OpenApiSpex.{Components, Info, OpenApi, Paths, SecurityScheme, Server}
-  alias TripPlannerWeb.{Endpoint, Router}
-  @behaviour OpenApi
+defmodule TripPlannerWeb.V1.OpenApi.OpenApiSpec do
+  @moduledoc """
+  Defines the OpenApi spec for our app
+  """
+  @behaviour OpenApiSpex.OpenApi
 
-  @impl OpenApi
+  alias OpenApiSpex.Components
+  alias OpenApiSpex.Info
+  alias OpenApiSpex.OpenApi
+  alias OpenApiSpex.Paths
+  alias OpenApiSpex.SecurityScheme
+  alias OpenApiSpex.Server
+  alias TripPlannerWeb.Endpoint
+  alias TripPlannerWeb.Router
+
   def spec do
-    %OpenApi{
+    # Discover request/response schemas from path specs
+    OpenApiSpex.resolve_schema_modules(%OpenApi{
       servers: [
         # Populate the Server info from a phoenix endpoint
         Server.from_endpoint(Endpoint)
@@ -23,13 +33,10 @@ defmodule TripPlannerWeb.OpenApi.OpenApiSpec do
             type: "http",
             scheme: "bearer",
             bearerFormat: "JWT",
-            description:
-              "Token must be provided in the headers via `Authorization: Bearer <token>`"
+            description: "Token must be provided in the headers via `Authorization: Bearer <token>`"
           }
         }
       }
-    }
-    # Discover request/response schemas from path specs
-    |> OpenApiSpex.resolve_schema_modules()
+    })
   end
 end

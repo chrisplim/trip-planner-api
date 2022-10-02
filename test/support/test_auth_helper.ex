@@ -9,9 +9,7 @@ defmodule TripPlannerWeb.TestAuthHelper do
   alias TripPlanner.Users.Users
 
   def authenticate(conn = %Plug.Conn{}, user \\ insert(:user)) do
-    {:ok, %{access_token: access_token, refresh_token: refresh_token}} =
-      Auth.create_tokens_for_user(user)
-
+    {:ok, %{access_token: access_token, refresh_token: refresh_token}} = Auth.create_tokens_for_user(user)
     {:ok, _} = Users.update_refresh_token(user, refresh_token)
 
     conn

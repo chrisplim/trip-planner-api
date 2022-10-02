@@ -1,21 +1,21 @@
-defmodule TripPlannerWeb.SessionController do
+defmodule TripPlannerWeb.V1.Sessions.SessionController do
   use TripPlannerWeb, :controller
   use TripPlannerWeb.CurrentUser
-  use TripPlannerWeb.OpenApi.OpenApiOperation
+  use TripPlannerWeb.V1.OpenApi.OpenApiOperation
 
   alias TripPlanner.Auth.Auth
   alias TripPlanner.Schemas.User
   alias TripPlanner.Users.Users
   alias TripPlannerWeb.FallbackController
   alias TripPlannerWeb.Guardian
-  alias TripPlannerWeb.UserView
+  alias TripPlannerWeb.V1.Users.UserView
 
   action_fallback(FallbackController)
 
   @doc """
   OpenApi spec for the login action
   """
-  def login_operation() do
+  def login_operation do
     %Operation{
       tags: ["sessions"],
       summary: "Login",
@@ -52,7 +52,7 @@ defmodule TripPlannerWeb.SessionController do
   @doc """
   OpenApi spec for the get_user_me action
   """
-  def refresh_token_operation() do
+  def refresh_token_operation do
     %Operation{
       tags: ["sessions"],
       summary: "Refresh the current user's auth tokens",

@@ -1,7 +1,7 @@
-defmodule TripPlannerWeb.TripController do
+defmodule TripPlannerWeb.V1.Trips.TripController do
   use TripPlannerWeb, :controller
   use TripPlannerWeb.CurrentUser
-  use TripPlannerWeb.OpenApi.OpenApiOperation
+  use TripPlannerWeb.V1.OpenApi.OpenApiOperation
 
   alias TripPlanner.Schemas.User
   alias TripPlanner.Trips.TripPolicy
@@ -13,7 +13,7 @@ defmodule TripPlannerWeb.TripController do
   @doc """
   OpenApi spec for the index action
   """
-  def index_operation() do
+  def index_operation do
     %Operation{
       tags: ["trips"],
       summary: "Get all trips of current user",
@@ -40,7 +40,7 @@ defmodule TripPlannerWeb.TripController do
   @doc """
   OpenApi spec for the create action
   """
-  def create_operation() do
+  def create_operation do
     %Operation{
       tags: ["trips"],
       summary: "Create a trip",
@@ -74,7 +74,7 @@ defmodule TripPlannerWeb.TripController do
   @doc """
   OpenApi spec for the show action
   """
-  def show_operation() do
+  def show_operation do
     %Operation{
       tags: ["trips"],
       summary: "Get a trip by an ID",
@@ -110,7 +110,7 @@ defmodule TripPlannerWeb.TripController do
   @doc """
   OpenApi spec for the update action
   """
-  def update_operation() do
+  def update_operation do
     %Operation{
       tags: ["trips"],
       summary: "Update a specific trip",
@@ -154,7 +154,7 @@ defmodule TripPlannerWeb.TripController do
   @doc """
   OpenApi spec for the delete action
   """
-  def delete_operation() do
+  def delete_operation do
     %Operation{
       tags: ["trips"],
       summary: "Delete a specific trip",
@@ -170,10 +170,10 @@ defmodule TripPlannerWeb.TripController do
         }
       ],
       responses: %{
-        200 =>
+        204 =>
           response(
-            "200 OK",
-            "application/json",
+            "204",
+            nil,
             OpenApiSchemas.OkResponse
           )
       }
@@ -184,7 +184,7 @@ defmodule TripPlannerWeb.TripController do
     with {:ok, trip} <- Trips.get_trip(trip_id),
          :ok <- Bodyguard.permit(TripPolicy, :delete_trip, user, trip),
          {:ok, _} <- Trips.delete_trip(trip) do
-      conn |> send_resp(200, "OK")
+      send_resp(conn, 204, "")
     end
   end
 end

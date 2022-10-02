@@ -4,8 +4,8 @@ defmodule TripPlanner.Users.Users do
   """
   import Ecto.Query, only: [from: 2]
 
-  alias TripPlanner.Schemas.User
   alias TripPlanner.Repo
+  alias TripPlanner.Schemas.User
 
   def create_user(attrs) do
     %User{}

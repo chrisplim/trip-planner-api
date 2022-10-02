@@ -1,4 +1,7 @@
-defmodule TripPlannerWeb.OpenApi.OpenApiSchemas do
+defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
+  @moduledoc """
+  Defines the OpenApi schemas for endpoints in our app
+  """
   alias OpenApiSpex.Schema
   require OpenApiSpex
 

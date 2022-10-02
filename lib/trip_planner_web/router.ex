@@ -2,6 +2,9 @@ defmodule TripPlannerWeb.Router do
   use TripPlannerWeb, :router
 
   # alias TripPlannerWeb.Plugs.DateParamsParserPlug
+  alias TripPlannerWeb.V1.Sessions.SessionController
+  alias TripPlannerWeb.V1.Trips.TripController
+  alias TripPlannerWeb.V1.Users.UserController
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -36,33 +39,37 @@ defmodule TripPlannerWeb.Router do
   end
 
   scope "/api" do
-    pipe_through([:parsed_body, :api])
-
-    scope "/sessions" do
-      post("/login", TripPlannerWeb.SessionController, :login)
-    end
-
-    scope "/users" do
-      post("/register", TripPlannerWeb.UserController, :register_user)
-    end
-
     get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
-  # Authed endpoints
-  scope "/api", TripPlannerWeb do
-    pipe_through([:parsed_body, :api, :api_auth_required])
+  scope "/api" do
+    scope "/v1" do
+      pipe_through([:parsed_body, :api])
 
-    scope "/sessions" do
-      post("/refresh_token", SessionController, :refresh_token)
+      scope "/sessions" do
+        post("/login", SessionController, :login)
+      end
+
+      scope "/users" do
+        post("/register", UserController, :register_user)
+      end
     end
 
-    scope "/users" do
-      get("/me", UserController, :get_user_me)
-    end
+    scope "/v1" do
+      # Authed endpoints
+      pipe_through([:parsed_body, :api, :api_auth_required])
 
-    resources "/trips", TripController,
-      only: [:index, :create, :show, :update, :delete],
-      param: "trip_id"
+      scope "/sessions" do
+        post("/refresh_token", SessionController, :refresh_token)
+      end
+
+      scope "/users" do
+        get("/me", UserController, :get_user_me)
+      end
+
+      resources "/trips", TripController,
+        only: [:index, :create, :show, :update, :delete],
+        param: "trip_id"
+    end
   end
 end
