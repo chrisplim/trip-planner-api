@@ -1,7 +1,7 @@
 defmodule TripPlanner.Auth.Auth do
   import Ecto.Query, only: [from: 2]
-  alias TripPlanner.Schemas.User
   alias TripPlanner.Repo
+  alias TripPlanner.Schemas.User
   alias TripPlannerWeb.Guardian
 
   def authenticate_user(username, plain_text_password) do

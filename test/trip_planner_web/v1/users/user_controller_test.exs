@@ -1,4 +1,4 @@
-defmodule TripPlannerWeb.UserControllerTest do
+defmodule TripPlannerWeb.V1.Users.UserControllerTest do
   use ExUnit.Case
   use TripPlannerWeb.ConnCase
 

@@ -1,4 +1,7 @@
 defmodule TripPlannerWeb.AuthPipeline do
+  @moduledoc """
+  Pipeline for Authentication. Uses Guardian and Bearer tokens
+  """
   use Guardian.Plug.Pipeline,
     otp_app: :trip_planner,
     error_handler: TripPlanner.Auth.AuthErrorHandler,

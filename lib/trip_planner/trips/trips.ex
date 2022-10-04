@@ -42,12 +42,15 @@ defmodule TripPlanner.Trips.Trips do
   def get_all_trips_including_user(%User{} = user) do
     query =
       from(trip in Trip,
-        join: user in assoc(trip, :users),
-        where: user.id == ^user.id,
+        left_join: user in assoc(trip, :user),
+        left_join: participant in assoc(trip, :users),
+        where: participant.id == ^user.id or user.id == ^user.id,
         preload: [:user]
       )
 
-    {:ok, Repo.all(query)}
+    result = Repo.all(query)
+    # {:ok, Repo.all(query)}
+    {:ok, result}
   end
 
   def update_trip(%Trip{} = trip, attrs) do

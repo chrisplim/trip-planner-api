@@ -1,6 +1,6 @@
-defmodule TripPlannerWeb.UserViewTest do
+defmodule TripPlannerWeb.V1.Users.UserViewTest do
   use ExUnit.Case
-  alias TripPlannerWeb.UserView
+  alias TripPlannerWeb.V1.Users.UserView
 
   import TripPlanner.Factory
 

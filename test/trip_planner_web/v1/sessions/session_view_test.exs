@@ -1,6 +1,6 @@
-defmodule TripPlannerWeb.SessionViewTest do
+defmodule TripPlannerWeb.V1.Sessions.SessionViewTest do
   use ExUnit.Case
-  alias TripPlannerWeb.SessionView
+  alias TripPlannerWeb.V1.Sessions.SessionView
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(TripPlanner.Repo)

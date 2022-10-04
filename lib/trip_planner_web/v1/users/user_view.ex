@@ -1,4 +1,4 @@
-defmodule TripPlannerWeb.UserView do
+defmodule TripPlannerWeb.V1.Users.UserView do
   use TripPlannerWeb, :view
 
   def render("user_auth.json", %{user: user, tokens: tokens}) do
