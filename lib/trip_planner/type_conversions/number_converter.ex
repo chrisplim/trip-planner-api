@@ -1,7 +1,4 @@
 defmodule TripPlanner.TypeConversions.NumberConverter do
-  @moduledoc """
-  Module for converting numbers
-  """
   @spec to_int(any(), Keyword.t()) :: {:ok, integer()} | {:error, String.t()}
   def to_int(value, opts \\ []) do
     default =
