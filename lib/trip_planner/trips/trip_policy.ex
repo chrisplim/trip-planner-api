@@ -19,7 +19,7 @@ defmodule TripPlanner.Trips.TripPolicy do
   end
 
   # Only the owner of this trip can delete it
-  def authorize(:delete_trip, %User{id: user_id}, %Trip{owner_id: user_id}), do: true
+  def authorize(:delete_trip, %User{id: user_id}, %Trip{owner_id: user_id}), do: :ok
 
   # Catch-all
   def authorize(_, _, _) do
