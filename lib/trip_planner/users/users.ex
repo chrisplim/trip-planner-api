@@ -30,7 +30,6 @@ defmodule TripPlanner.Users.Users do
     query =
       from(user in User,
         where: user.id == ^user_id
-        # preload: [:government_id]
       )
 
     case Repo.one(query) do
