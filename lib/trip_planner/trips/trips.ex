@@ -21,7 +21,7 @@ defmodule TripPlanner.Trips.Trips do
       |> Repo.insert()
 
     case result do
-      {:ok, trip} -> {:ok, Repo.preload(trip, :user)}
+      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users])}
       error -> error
     end
   end
@@ -45,20 +45,25 @@ defmodule TripPlanner.Trips.Trips do
         left_join: user in assoc(trip, :user),
         left_join: participant in assoc(trip, :users),
         where: participant.id == ^user.id or user.id == ^user.id,
+        group_by: [trip.id],
         preload: [:user]
       )
 
-    result = Repo.all(query)
-    # {:ok, Repo.all(query)}
-    {:ok, result}
+    {:ok, Repo.all(query)}
   end
 
   def update_trip(%Trip{} = trip, attrs) do
     attrs = DateTimeConverter.convert_date_keys_in_map(attrs)
 
-    trip
-    |> Trip.update_changeset(attrs)
-    |> Repo.update()
+    result =
+      trip
+      |> Trip.update_changeset(attrs)
+      |> Repo.update()
+
+    case result do
+      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users])}
+      error -> error
+    end
   end
 
   def delete_trip(%Trip{} = trip) do

@@ -24,6 +24,7 @@ defmodule TripPlanner.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import TripPlanner.DataCase
+      import Assertions
     end
   end
 

@@ -31,7 +31,6 @@ defmodule TripPlanner.Schemas.Trip do
   def update_changeset(trip, params) do
     trip
     |> cast(params, [:name, :description, :start_date, :end_date, :owner_id])
-    |> validate_required([:name, :owner_id])
     |> foreign_key_constraint(:owner_id)
     |> unique_constraint([:owner_id, :name], name: :unique_trip_name_per_owner)
   end
