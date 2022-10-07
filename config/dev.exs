@@ -5,6 +5,8 @@ database_url = System.get_env("DATABASE_URL", "")
 
 config :trip_planner, TripPlanner.Repo,
   url: String.replace(database_url, "?", "dev"),
+  # Use for docker-compose
+  # url: "postgres://postgres:postgres@db:5432/trip_planner_dev",
   database: "trip_planner_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
@@ -20,7 +22,9 @@ config :trip_planner, TripPlanner.Repo,
 config :trip_planner, TripPlannerWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  # http: [ip: {0, 0, 0, 0}, port: 4000],
+  # http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
