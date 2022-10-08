@@ -46,7 +46,7 @@ defmodule TripPlanner.Trips.Trips do
         left_join: participant in assoc(trip, :users),
         where: participant.id == ^user.id or user.id == ^user.id,
         group_by: [trip.id],
-        preload: [:user]
+        preload: [:user, :users]
       )
 
     {:ok, Repo.all(query)}

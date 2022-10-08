@@ -14,7 +14,8 @@ defmodule TripPlannerWeb.V1.Trips.TripView do
       description: trip.description,
       start_date: DateTimeConverter.to_integer(trip.start_date),
       end_date: DateTimeConverter.to_integer(trip.end_date),
-      owner: render_one(trip.user, UserView, "user.json", as: :user)
+      owner: render_one(trip.user, UserView, "user.json", as: :user),
+      users: render_many(trip.users, UserView, "user.json", as: :user)
     }
   end
 end

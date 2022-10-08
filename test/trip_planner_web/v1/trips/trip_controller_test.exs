@@ -9,7 +9,7 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
     test "authenticated user, owner of trip", %{conn: conn} do
       user = insert(:user)
       user_id = user.id
-      trip = insert(:trip, user: user)
+      trip = insert(:trip, user: user, users: [user])
       trip_id = trip.id
       trip_name = trip.name
 
@@ -25,7 +25,8 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                  "description" => nil,
                  "start_date" => nil,
                  "end_date" => nil,
-                 "owner" => %{"id" => ^user_id}
+                 "owner" => %{"id" => ^user_id},
+                 "users" => [%{"id" => ^user_id}]
                }
              ] = json_response(conn, 200)
     end
@@ -55,7 +56,8 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                "description" => "my test trip",
                "start_date" => 1_664_848_505,
                "end_date" => nil,
-               "owner" => %{"id" => ^user_id}
+               "owner" => %{"id" => ^user_id},
+               "users" => [%{"id" => ^user_id}]
              } = json_response(conn, 200)
     end
 
@@ -95,7 +97,8 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                "description" => "my test trip",
                "start_date" => 1_664_848_505,
                "end_date" => nil,
-               "owner" => %{"id" => ^user_id}
+               "owner" => %{"id" => ^user_id},
+               "users" => []
              } = json_response(conn, 200)
     end
 
@@ -154,6 +157,7 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
   describe "update" do
     test "authenticated user, and can update the trip", %{conn: conn} do
       user = insert(:user)
+      user_id = user.id
       trip = insert(:trip, users: [user])
       trip_id = trip.id
 
@@ -175,7 +179,8 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                "description" => "new trip description",
                "start_date" => 1_664_848_505,
                "end_date" => 1_664_848_505,
-               "owner" => %{"id" => _}
+               "owner" => %{"id" => _},
+               "users" => [%{"id" => ^user_id}]
              } = json_response(conn, 200)
     end
 

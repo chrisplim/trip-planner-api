@@ -9,13 +9,14 @@ defmodule TripPlannerWeb.V1.Trips.TripViewTest do
   end
 
   test "trips.json" do
-    trips = %{trips: insert_list(3, :trip)}
+    trips = %{trips: insert_list(3, :trip, users: [])}
     assert [%{id: _, owner: _}, %{id: _, owner: _}, %{id: _, owner: _}] = TripView.render("trips.json", trips)
   end
 
   test "trip.json" do
     start_datetime = DateTime.utc_now()
-    trip = insert(:trip, name: "test_trip", description: "my test trip", start_date: start_datetime)
+    [%{id: user1_id}, %{id: user2_id}] = users = insert_pair(:user)
+    trip = insert(:trip, name: "test_trip", description: "my test trip", start_date: start_datetime, users: users)
     expected_start_int = DateTimeConverter.to_integer(start_datetime)
 
     assert %{
@@ -24,7 +25,11 @@ defmodule TripPlannerWeb.V1.Trips.TripViewTest do
              description: "my test trip",
              start_date: ^expected_start_int,
              end_date: nil,
-             owner: %{id: _, first_name: _, last_name: _, email: _, phone: _, username: _}
+             owner: %{id: _, first_name: _, last_name: _, email: _, phone: _, username: _},
+             users: [
+               %{id: ^user1_id, first_name: _, last_name: _, email: _, phone: _, username: _},
+               %{id: ^user2_id, first_name: _, last_name: _, email: _, phone: _, username: _}
+             ]
            } = TripView.render("trip.json", %{trip: trip})
   end
 end
