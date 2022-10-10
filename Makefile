@@ -5,6 +5,6 @@ test:
 lint:
 	mix credo
 
-checks: lint test
+check: lint test
 
-.PHONY: test lint checks
+.PHONY: test lint check

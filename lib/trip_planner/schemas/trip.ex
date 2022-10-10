@@ -8,7 +8,7 @@ defmodule TripPlanner.Schemas.Trip do
     field(:description, :string)
     field(:start_date, :utc_datetime)
     field(:end_date, :utc_datetime)
-    belongs_to(:user, TripPlanner.Schemas.User, foreign_key: :owner_id, on_replace: :nilify)
+    belongs_to(:user, User, foreign_key: :owner_id, on_replace: :nilify)
 
     many_to_many(:users, User,
       join_through: "users_trips",

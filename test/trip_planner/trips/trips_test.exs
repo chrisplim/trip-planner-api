@@ -8,7 +8,9 @@ defmodule TripPlanner.Trips.TripsTest do
   describe "create_trip" do
     @valid_attrs %{
       "name" => "trip name",
-      "description" => "trip description"
+      "description" => "trip description",
+      "start_date" => DateTime.utc_now(),
+      "end_date" => DateTime.utc_now()
     }
 
     @invalid_attrs %{"name" => 123, "description" => 123}
@@ -16,6 +18,7 @@ defmodule TripPlanner.Trips.TripsTest do
     test "valid attrs; no dates" do
       user = insert(:user)
       user_id = user.id
+      attrs = @valid_attrs |> Map.delete("start_date") |> Map.delete("end_date")
 
       assert {:ok,
               %Trip{
@@ -26,7 +29,7 @@ defmodule TripPlanner.Trips.TripsTest do
                 owner_id: ^user_id,
                 user: %User{id: ^user_id},
                 users: [%User{id: ^user_id}]
-              }} = Trips.create_trip(user, @valid_attrs)
+              }} = Trips.create_trip(user, attrs)
     end
 
     test "valid attrs; with dates" do
@@ -113,6 +116,7 @@ defmodule TripPlanner.Trips.TripsTest do
   describe "update_trip" do
     test "valid attrs; no dates" do
       trip = insert(:trip, name: "update trip test name", description: "update trip test description")
+      attrs = @valid_attrs |> Map.delete("start_date") |> Map.delete("end_date")
 
       assert {:ok,
               %Trip{
@@ -123,7 +127,7 @@ defmodule TripPlanner.Trips.TripsTest do
                 owner_id: _,
                 user: %User{},
                 users: []
-              }} = Trips.update_trip(trip, @valid_attrs)
+              }} = Trips.update_trip(trip, attrs)
     end
 
     test "valid attrs; with dates" do

@@ -4,6 +4,7 @@ defmodule TripPlanner.Factory do
   """
   use ExMachina.Ecto, repo: TripPlanner.Repo
 
+  use TripPlanner.Schemas.ActivityFactory
   use TripPlanner.Schemas.TripFactory
   use TripPlanner.Schemas.UserFactory
 end

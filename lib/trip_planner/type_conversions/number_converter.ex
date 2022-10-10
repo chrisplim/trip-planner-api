@@ -22,6 +22,11 @@ defmodule TripPlanner.TypeConversions.NumberConverter do
     end
   end
 
+  def to_int!(value, opts \\ []) do
+    {:ok, int} = to_int(value, opts)
+    int
+  end
+
   @spec to_float(any(), Keyword.t()) :: {:ok, float()} | {:error, String.t()}
   def to_float(value, opts \\ []) do
     default =

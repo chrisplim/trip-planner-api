@@ -41,11 +41,19 @@ defmodule TripPlanner.TypeConversions.DateTimeConverter do
   end
 
   def convert_date_keys_in_map(%{} = map) do
-    {:ok, start_datetime} = from_timestamp(map["start_date"], default: nil)
-    {:ok, end_datetime} = from_timestamp(map["end_date"], default: nil)
+    map =
+      with %{"start_date" => start_date} <- map,
+           {:ok, dt} <- from_timestamp(start_date) do
+        Map.put(map, "start_date", dt)
+      else
+        _ -> map
+      end
 
-    map
-    |> Map.put("start_date", start_datetime)
-    |> Map.put("end_date", end_datetime)
+    with %{"end_date" => end_date} <- map,
+         {:ok, dt} <- from_timestamp(end_date) do
+      Map.put(map, "end_date", dt)
+    else
+      _ -> map
+    end
   end
 end

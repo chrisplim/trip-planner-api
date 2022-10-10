@@ -3,6 +3,7 @@ defmodule TripPlannerWeb.Router do
 
   # alias TripPlannerWeb.Plugs.DateParamsParserPlug
   alias TripPlannerWeb.V1.Sessions.SessionController
+  alias TripPlannerWeb.V1.Trips.ActivityController
   alias TripPlannerWeb.V1.Trips.TripController
   alias TripPlannerWeb.V1.Users.UserController
 
@@ -67,9 +68,13 @@ defmodule TripPlannerWeb.Router do
         get("/me", UserController, :get_user_me)
       end
 
-      resources "/trips", TripController,
-        only: [:index, :create, :show, :update, :delete],
-        param: "trip_id"
+      resources "/trips", TripController, only: [:index, :create, :show, :update, :delete], param: "trip_id"
+
+      scope "/trips/:trip_id", as: :trip do
+        resources "/activities", ActivityController,
+          only: [:create, :show, :update, :delete],
+          param: "activity_id"
+      end
     end
   end
 end

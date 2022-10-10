@@ -55,7 +55,8 @@ defmodule TripPlanner.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:credo_envvar, "~> 0.1", only: [:dev, :test], runtime: false},
       {:credo_naming, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:assertions, "~> 0.6.1", only: [:test]}
+      {:assertions, "~> 0.6.1", only: [:test]},
+      {:money, "~> 1.11"}
     ]
   end
 

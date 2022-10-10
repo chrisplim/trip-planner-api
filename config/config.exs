@@ -61,6 +61,10 @@ config :phoenix, :json_library, Jason
 
 config :argon2_elixir, t_cost: 4, m_cost: 8
 
+config :money,
+  default_currency: :USD,
+  custom_currencies: []
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
