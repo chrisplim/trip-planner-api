@@ -16,24 +16,32 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   """
   def create_operation do
     %Operation{
-      tags: ["trips"],
-      summary: "Create a trip",
-      description: "Create a trip",
-      operationId: "TripController.create",
+      tags: ["activities"],
+      summary: "Create an activity",
+      description: "Create an activity",
+      operationId: "ActivityController.create",
       security: [%{"authorization" => []}],
+      parameters: [
+        %Parameter{
+          name: "trip_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.TripId
+        }
+      ],
       requestBody:
         request_body(
-          "The attributes needed to create a new trip",
+          "The attributes needed to create a new activity",
           "application/json",
-          OpenApiSchemas.NewTripRequest,
+          OpenApiSchemas.NewActivityRequest,
           required: true
         ),
       responses: %{
         200 =>
           response(
-            "Info of the created trip",
+            "Info of the created activity",
             "application/json",
-            OpenApiSchemas.TripResponse
+            OpenApiSchemas.ActivityResponse
           )
       }
     }
@@ -52,25 +60,31 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   """
   def show_operation do
     %Operation{
-      tags: ["trips"],
-      summary: "Get a trip by an ID",
-      description: "Get a trip by an ID",
-      operationId: "TripController.show",
+      tags: ["activities"],
+      summary: "Get a activity by an ID",
+      description: "Get a activity by an ID",
+      operationId: "ActivityController.show",
       security: [%{"authorization" => []}],
       parameters: [
         %Parameter{
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
+        },
+        %Parameter{
+          name: "activity_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.ActivityId
         }
       ],
       responses: %{
         200 =>
           response(
-            "Info of the trip",
+            "Info of the activity",
             "application/json",
-            OpenApiSchemas.TripResponse
+            OpenApiSchemas.ActivityResponse
           )
       }
     }
@@ -79,7 +93,8 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def show(conn, %{"trip_id" => trip_id, "activity_id" => activity_id}, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
          {:ok, activity} <- Activities.get_activity(activity_id),
-         :ok <- Bodyguard.permit(ActivityPolicy, :see_activity, user, %{trip: trip, activity: activity}) do
+         :ok <-
+           Bodyguard.permit(ActivityPolicy, :see_activity, user, %{trip: trip, activity: activity}) do
       render(conn, "activity.json", %{activity: activity})
     end
   end
@@ -89,32 +104,38 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   """
   def update_operation do
     %Operation{
-      tags: ["trips"],
-      summary: "Update a specific trip",
-      description: "Update a specific trip",
-      operationId: "TripController.update",
+      tags: ["activities"],
+      summary: "Update a specific activity",
+      description: "Update a specific activity",
+      operationId: "ActivityController.update",
       security: [%{"authorization" => []}],
       parameters: [
         %Parameter{
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
+        },
+        %Parameter{
+          name: "activity_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.ActivityId
         }
       ],
       requestBody:
         request_body(
-          "The attributes needed to update a trip",
+          "The attributes needed to update a activity",
           "application/json",
-          OpenApiSchemas.UpdateTripRequest,
+          OpenApiSchemas.UpdateActivityRequest,
           required: false
         ),
       responses: %{
         200 =>
           response(
-            "Info of the updated trip",
+            "Info of the updated activity",
             "application/json",
-            OpenApiSchemas.TripResponse
+            OpenApiSchemas.ActivityResponse
           )
       }
     }
@@ -123,7 +144,11 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def update(conn, %{"trip_id" => trip_id, "activity_id" => activity_id} = attrs, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
          {:ok, activity} <- Activities.get_activity(activity_id),
-         :ok <- Bodyguard.permit(ActivityPolicy, :update_activity, user, %{trip: trip, activity: activity}),
+         :ok <-
+           Bodyguard.permit(ActivityPolicy, :update_activity, user, %{
+             trip: trip,
+             activity: activity
+           }),
          {:ok, activity} <- Activities.update_activity(activity, attrs) do
       render(conn, "activity.json", %{activity: activity})
     end
@@ -134,17 +159,23 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   """
   def delete_operation do
     %Operation{
-      tags: ["trips"],
-      summary: "Delete a specific trip",
-      description: "Delete a specific trip",
-      operationId: "TripController.delete",
+      tags: ["activities"],
+      summary: "Delete a specific activity",
+      description: "Delete a specific activity",
+      operationId: "ActivityController.delete",
       security: [%{"authorization" => []}],
       parameters: [
         %Parameter{
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
+        },
+        %Parameter{
+          name: "activity_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.ActivityId
         }
       ],
       responses: %{
@@ -161,7 +192,11 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def delete(conn, %{"trip_id" => trip_id, "activity_id" => activity_id}, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
          {:ok, activity} <- Activities.get_activity(activity_id),
-         :ok <- Bodyguard.permit(ActivityPolicy, :delete_activity, user, %{trip: trip, activity: activity}),
+         :ok <-
+           Bodyguard.permit(ActivityPolicy, :delete_activity, user, %{
+             trip: trip,
+             activity: activity
+           }),
          {:ok, _} <- Activities.delete_activity(activity) do
       send_resp(conn, 204, "")
     end

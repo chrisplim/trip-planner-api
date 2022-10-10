@@ -157,7 +157,7 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
     })
   end
 
-  defmodule TripIdPathParameter do
+  defmodule TripId do
     OpenApiSpex.schema(%{
       description: "Trip id",
       type: :string,
@@ -234,7 +234,7 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
 
   defmodule TripResponse do
     OpenApiSpex.schema(%{
-      description: "Current User information",
+      description: "Trip information",
       type: :object,
       properties: %{
         id: %Schema{type: :string, format: :uuid, description: "Trip ID"},
@@ -269,14 +269,24 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
           "username" => "joebruin",
           "email" => "joebruin@gmail.com",
           "phone" => "3101234567"
-        }
+        },
+        "users" => [
+          %{
+            "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
+            "first_name" => "Joe",
+            "last_name" => "Bruin",
+            "username" => "joebruin",
+            "email" => "joebruin@gmail.com",
+            "phone" => "3101234567"
+          }
+        ]
       }
     })
   end
 
   defmodule TripsResponse do
     OpenApiSpex.schema(%{
-      description: "Current User information",
+      description: "Trip Information List",
       type: :array,
       items: TripResponse
     })
@@ -287,6 +297,194 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
       description: "200 OK response",
       type: :string,
       example: "OK"
+    })
+  end
+
+  defmodule ActivityId do
+    OpenApiSpex.schema(%{
+      description: "Activity id",
+      type: :string,
+      example: "4a8c6f21-0fac-4705-98c3-e1f7d5e2cd6d"
+    })
+  end
+
+  defmodule TripPlannerMoney do
+    OpenApiSpex.schema(%{
+      description: "Money object",
+      type: :object,
+      properties: %{
+        amount: %Schema{type: :integer, description: "Amount"},
+        currency: %Schema{type: :string, description: "Currency Code"}
+      }
+    })
+  end
+
+  defmodule NewActivityRequest do
+    OpenApiSpex.schema(%{
+      description: "New Activity information",
+      type: :object,
+      properties: %{
+        name: %Schema{
+          type: :string,
+          description: "Name",
+          pattern: ~r/[a-zA-Z]+/
+        },
+        website: %Schema{
+          type: :string,
+          description: "Website"
+        },
+        location: %Schema{
+          type: :string,
+          description: "Location"
+        },
+        phone: %Schema{
+          type: :string,
+          description: "Phone"
+        },
+        price_per_person: TripPlannerMoney,
+        notes: %Schema{
+          type: :string,
+          description: "Notes"
+        },
+        start_date: %Schema{
+          type: :integer,
+          description: "Start Date"
+        },
+        end_date: %Schema{
+          type: :integer,
+          description: "End Date"
+        }
+      },
+      required: [:name],
+      example: %{
+        "name" => "Hawaii",
+        "website" => "http://example.com",
+        "location" => "At my house",
+        "phone" => "3101234567",
+        # 10.00 USD
+        "price_per_person" => %{"amount" => 1000, "currency" => "USD"},
+        "notes" => "some note",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123
+      }
+    })
+  end
+
+  defmodule UpdateActivityRequest do
+    OpenApiSpex.schema(%{
+      description: "Update Activity information",
+      type: :object,
+      properties: %{
+        name: %Schema{
+          type: :string,
+          description: "Name",
+          pattern: ~r/[a-zA-Z]+/
+        },
+        website: %Schema{
+          type: :string,
+          description: "Website"
+        },
+        location: %Schema{
+          type: :string,
+          description: "Location"
+        },
+        phone: %Schema{
+          type: :string,
+          description: "Phone"
+        },
+        price_per_person: TripPlannerMoney,
+        notes: %Schema{
+          type: :string,
+          description: "Notes"
+        },
+        start_date: %Schema{
+          type: :integer,
+          description: "Start Date"
+        },
+        end_date: %Schema{
+          type: :integer,
+          description: "End Date"
+        }
+      },
+      example: %{
+        "name" => "Hawaii",
+        "website" => "http://example.com",
+        "location" => "At my house",
+        "phone" => "3101234567",
+        # 10.00 USD
+        "price_per_person" => %{"amount" => 1000, "currency" => "USD"},
+        "notes" => "some note",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123
+      }
+    })
+  end
+
+  defmodule ActivityResponse do
+    OpenApiSpex.schema(%{
+      description: "Activity information",
+      type: :object,
+      properties: %{
+        id: %Schema{type: :string, format: :uuid, description: "Activity ID"},
+        name: %Schema{
+          type: :string,
+          description: "Name"
+        },
+        website: %Schema{
+          type: :string,
+          description: "Website"
+        },
+        location: %Schema{
+          type: :string,
+          description: "Location"
+        },
+        phone: %Schema{
+          type: :string,
+          description: "Phone"
+        },
+        price_per_person: TripPlannerMoney,
+        price_per_person_string: %Schema{
+          type: :string,
+          format: "<currency_symbol><amount>",
+          description: "Price per person in string form"
+        },
+        notes: %Schema{
+          type: :string,
+          description: "Notes"
+        },
+        start_date: %Schema{
+          type: :integer,
+          description: "Start Date"
+        },
+        end_date: %Schema{
+          type: :integer,
+          description: "End Date"
+        },
+        user: UserResponse,
+        trip_id: TripId
+      },
+      example: %{
+        "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
+        "name" => "Fun Activity",
+        "website" => "http://example.com",
+        "location" => "At my house",
+        "phone" => "3101234567",
+        # 10.00 USD
+        "price_per_person" => %{"amount" => 1000, "currency" => "USD"},
+        "price_per_person_string" => "$10.00",
+        "notes" => "some note",
+        "start_date" => 1_664_422_123,
+        "end_date" => 1_664_422_123,
+        "user" => %{
+          "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
+          "first_name" => "Joe",
+          "last_name" => "Bruin",
+          "username" => "joebruin",
+          "email" => "joebruin@gmail.com",
+          "phone" => "3101234567"
+        },
+        "trip_id" => "3a8c6f21-0fac-4705-98c3-e1f7d5e2cd6d"
+      }
     })
   end
 end

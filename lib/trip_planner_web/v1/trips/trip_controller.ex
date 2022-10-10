@@ -86,7 +86,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
         }
       ],
       responses: %{
@@ -122,7 +122,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
         }
       ],
       requestBody:
@@ -166,7 +166,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
           name: "trip_id",
           in: "path",
           required: true,
-          schema: OpenApiSchemas.TripIdPathParameter
+          schema: OpenApiSchemas.TripId
         }
       ],
       responses: %{
