@@ -19,6 +19,5 @@ npm-debug.log
 
 benchee.exs
 
-openapi.json
 secrets
 *.local
