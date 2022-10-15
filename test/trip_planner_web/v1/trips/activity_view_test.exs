@@ -8,13 +8,6 @@ defmodule TripPlannerWeb.V1.Trips.ActivityViewTest do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(TripPlanner.Repo)
   end
 
-  test "activities.json" do
-    activities = %{activities: insert_list(3, :activity)}
-
-    assert [%{id: _, user: _}, %{id: _, user: _}, %{id: _, user: _}] =
-             ActivityView.render("activities.json", activities)
-  end
-
   test "activity.json" do
     datetime = DateTime.utc_now()
     expected_datetime_int = DateTimeConverter.to_integer(datetime)

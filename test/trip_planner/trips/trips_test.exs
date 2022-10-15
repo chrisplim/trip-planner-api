@@ -2,6 +2,7 @@ defmodule TripPlanner.Trips.TripsTest do
   use TripPlanner.DataCase
   import TripPlanner.Factory
   alias TripPlanner.Trips.Trips
+  alias TripPlanner.Schemas.Activity
   alias TripPlanner.Schemas.Trip
   alias TripPlanner.Schemas.User
 
@@ -28,7 +29,8 @@ defmodule TripPlanner.Trips.TripsTest do
                 end_date: nil,
                 owner_id: ^user_id,
                 user: %User{id: ^user_id},
-                users: [%User{id: ^user_id}]
+                users: [%User{id: ^user_id}],
+                activities: []
               }} = Trips.create_trip(user, attrs)
     end
 
@@ -67,9 +69,12 @@ defmodule TripPlanner.Trips.TripsTest do
 
   describe "get_trip" do
     test "trip exists" do
-      trip = insert(:trip)
+      activities = insert_pair(:activity)
+      trip = insert(:trip, activities: activities)
       trip_id = trip.id
-      assert {:ok, %Trip{id: ^trip_id, users: [], user: %User{}}} = Trips.get_trip(trip_id)
+
+      assert {:ok, %Trip{id: ^trip_id, users: [], user: %User{}, activities: [%Activity{}, %Activity{}]}} =
+               Trips.get_trip(trip_id)
     end
 
     test "trip doesn't exist" do
@@ -86,9 +91,10 @@ defmodule TripPlanner.Trips.TripsTest do
 
     test "user is the owner of a trip" do
       user = insert(:user)
-      trip = insert(:trip, user: user)
+      activities = insert_pair(:activity)
+      trip = insert(:trip, user: user, activities: activities)
       trip_id = trip.id
-      assert {:ok, [%Trip{id: ^trip_id}]} = Trips.get_all_trips_including_user(user)
+      assert {:ok, [%Trip{id: ^trip_id, activities: [_, _]}]} = Trips.get_all_trips_including_user(user)
     end
 
     test "user is the participant of a trip" do
@@ -115,7 +121,11 @@ defmodule TripPlanner.Trips.TripsTest do
 
   describe "update_trip" do
     test "valid attrs; no dates" do
-      trip = insert(:trip, name: "update trip test name", description: "update trip test description")
+      activities = insert_pair(:activity)
+
+      trip =
+        insert(:trip, activities: activities, name: "update trip test name", description: "update trip test description")
+
       attrs = @valid_attrs |> Map.delete("start_date") |> Map.delete("end_date")
 
       assert {:ok,
@@ -126,7 +136,8 @@ defmodule TripPlanner.Trips.TripsTest do
                 end_date: nil,
                 owner_id: _,
                 user: %User{},
-                users: []
+                users: [],
+                activities: [_, _]
               }} = Trips.update_trip(trip, attrs)
     end
 

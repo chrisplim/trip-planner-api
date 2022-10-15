@@ -21,7 +21,7 @@ defmodule TripPlanner.Trips.Trips do
       |> Repo.insert()
 
     case result do
-      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users])}
+      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users, {:activities, :user}])}
       error -> error
     end
   end
@@ -30,7 +30,7 @@ defmodule TripPlanner.Trips.Trips do
     query =
       from(trip in Trip,
         where: trip.id == type(^trip_id, :binary_id),
-        preload: [:user, :users]
+        preload: [:user, :users, {:activities, :user}]
       )
 
     case Repo.one(query) do
@@ -46,7 +46,7 @@ defmodule TripPlanner.Trips.Trips do
         left_join: participant in assoc(trip, :users),
         where: participant.id == ^user.id or user.id == ^user.id,
         group_by: [trip.id],
-        preload: [:user, :users]
+        preload: [:user, :users, {:activities, :user}]
       )
 
     {:ok, Repo.all(query)}
@@ -61,7 +61,7 @@ defmodule TripPlanner.Trips.Trips do
       |> Repo.update()
 
     case result do
-      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users])}
+      {:ok, trip} -> {:ok, Repo.preload(trip, [:user, :users, {:activities, :user}])}
       error -> error
     end
   end

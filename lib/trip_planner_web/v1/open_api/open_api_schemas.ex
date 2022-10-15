@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Design.DuplicatedCode
 defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
   @moduledoc """
   Defines the OpenApi schemas for endpoints in our app
@@ -47,7 +48,7 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
 
   defmodule UserResponse do
     OpenApiSpex.schema(%{
-      description: "Current user information",
+      description: "User information",
       type: :object,
       properties: %{
         id: %Schema{type: :string, format: :uuid, description: "User ID"},
@@ -372,7 +373,7 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
 
   defmodule UpdateActivityRequest do
     OpenApiSpex.schema(%{
-      description: "Update Activity information",
+      description: "Update Activity Request information",
       type: :object,
       properties: %{
         name: %Schema{
@@ -407,15 +408,15 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
         }
       },
       example: %{
-        "name" => "Hawaii",
+        "name" => "New Hawaii",
         "website" => "http://example.com",
-        "location" => "At my house",
+        "location" => "New place",
         "phone" => "3101234567",
-        # 10.00 USD
-        "price_per_person" => %{"amount" => 1000, "currency" => "USD"},
-        "notes" => "some note",
-        "start_date" => 1_664_422_123,
-        "end_date" => 1_664_422_123
+        # 40.00 USD
+        "price_per_person" => %{"amount" => 4000, "currency" => "USD"},
+        "notes" => "some updated note",
+        "start_date" => 1_664_422_129,
+        "end_date" => 1_664_422_129
       }
     })
   end

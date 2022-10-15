@@ -3,10 +3,6 @@ defmodule TripPlannerWeb.V1.Trips.ActivityView do
   alias TripPlanner.TypeConversions.DateTimeConverter
   alias TripPlannerWeb.V1.Users.UserView
 
-  def render("activities.json", %{activities: activities}) do
-    render_many(activities, __MODULE__, "activity.json", as: :activity)
-  end
-
   def render("activity.json", %{activity: activity}) do
     price_per_person_string =
       if activity.price_per_person do

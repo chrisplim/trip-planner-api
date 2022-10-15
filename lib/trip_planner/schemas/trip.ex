@@ -1,6 +1,7 @@
 defmodule TripPlanner.Schemas.Trip do
   use TripPlanner.Schema
   import Ecto.Changeset
+  alias TripPlanner.Schemas.Activity
   alias TripPlanner.Schemas.User
 
   schema "trips" do
@@ -9,6 +10,8 @@ defmodule TripPlanner.Schemas.Trip do
     field(:start_date, :utc_datetime)
     field(:end_date, :utc_datetime)
     belongs_to(:user, User, foreign_key: :owner_id, on_replace: :nilify)
+
+    has_many(:activities, Activity)
 
     many_to_many(:users, User,
       join_through: "users_trips",
