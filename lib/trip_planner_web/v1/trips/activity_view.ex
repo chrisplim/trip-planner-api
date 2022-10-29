@@ -22,6 +22,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityView do
       notes: activity.notes,
       start_date: DateTimeConverter.to_integer(activity.start_date),
       end_date: DateTimeConverter.to_integer(activity.end_date),
+      is_interested: activity.is_interested,
       user: render_one(activity.user, UserView, "user.json", as: :user),
       trip_id: activity.trip_id
     }

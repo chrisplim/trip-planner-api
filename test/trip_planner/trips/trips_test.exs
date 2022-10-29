@@ -67,14 +67,40 @@ defmodule TripPlanner.Trips.TripsTest do
     end
   end
 
+  describe "get_trip_with_activities_preloads" do
+    test "trip exists" do
+      user = insert(:user)
+      [activity, _] = activities = insert_pair(:activity)
+      insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
+      trip = insert(:trip, activities: activities)
+      trip_id = trip.id
+
+      assert {:ok,
+              %Trip{
+                id: ^trip_id,
+                users: [],
+                user: %User{},
+                activities: [
+                  %Activity{user: %User{}, is_interested: true},
+                  %Activity{user: %User{}, is_interested: nil}
+                ]
+              }} = Trips.get_trip_with_activities_preloads(user, trip_id)
+    end
+
+    test "trip doesn't exist" do
+      user = insert(:user)
+      trip_id = Faker.UUID.v4()
+      assert {:error, :not_found} = Trips.get_trip_with_activities_preloads(user, trip_id)
+    end
+  end
+
   describe "get_trip" do
     test "trip exists" do
       activities = insert_pair(:activity)
       trip = insert(:trip, activities: activities)
       trip_id = trip.id
 
-      assert {:ok, %Trip{id: ^trip_id, users: [], user: %User{}, activities: [%Activity{}, %Activity{}]}} =
-               Trips.get_trip(trip_id)
+      assert {:ok, %Trip{id: ^trip_id, users: [], user: %User{}}} = Trips.get_trip(trip_id)
     end
 
     test "trip doesn't exist" do
@@ -117,10 +143,30 @@ defmodule TripPlanner.Trips.TripsTest do
       result_trip_ids = Enum.map(results, & &1.id)
       assert_lists_equal(result_trip_ids, [trip1.id, trip2.id, trip3.id])
     end
+
+    test "the activities preload" do
+      user = insert(:user)
+      [activity, _] = activities = insert_pair(:activity)
+      insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
+      trip = insert(:trip, users: [user], activities: activities)
+      trip_id = trip.id
+
+      assert {:ok,
+              [
+                %Trip{
+                  id: ^trip_id,
+                  activities: [
+                    %Activity{user: %User{}, is_interested: true},
+                    %Activity{user: %User{}, is_interested: nil}
+                  ]
+                }
+              ]} = Trips.get_all_trips_including_user(user)
+    end
   end
 
   describe "update_trip" do
     test "valid attrs; no dates" do
+      user = insert(:user)
       activities = insert_pair(:activity)
 
       trip =
@@ -137,11 +183,12 @@ defmodule TripPlanner.Trips.TripsTest do
                 owner_id: _,
                 user: %User{},
                 users: [],
-                activities: [_, _]
-              }} = Trips.update_trip(trip, attrs)
+                activities: [%Activity{user: %User{}, is_interested: nil}, _]
+              }} = Trips.update_trip(user, trip, attrs)
     end
 
     test "valid attrs; with dates" do
+      user = insert(:user)
       trip = insert(:trip, name: "update trip test name", description: "update trip test description")
       time_integer = 1_664_939_105
       attrs = @valid_attrs |> Map.put("start_date", time_integer) |> Map.put("end_date", time_integer)
@@ -157,10 +204,11 @@ defmodule TripPlanner.Trips.TripsTest do
                 owner_id: _,
                 user: %User{},
                 users: []
-              }} = Trips.update_trip(trip, attrs)
+              }} = Trips.update_trip(user, trip, attrs)
     end
 
     test "invalid attrs" do
+      user = insert(:user)
       trip = insert(:trip, name: "update trip test name", description: "update trip test description")
 
       assert {:error,
@@ -169,14 +217,15 @@ defmodule TripPlanner.Trips.TripsTest do
                   name: {"is invalid", [type: :string, validation: :cast]},
                   description: {"is invalid", [type: :string, validation: :cast]}
                 ]
-              }} = Trips.update_trip(trip, @invalid_attrs)
+              }} = Trips.update_trip(user, trip, @invalid_attrs)
     end
 
     test "trip doesn't exist" do
+      user = insert(:user)
       trip = %Trip{id: Faker.UUID.v4()}
 
       assert_raise Ecto.StaleEntryError, fn ->
-        Trips.update_trip(trip, @valid_attrs)
+        Trips.update_trip(user, trip, @valid_attrs)
       end
     end
   end

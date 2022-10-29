@@ -92,7 +92,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
 
   def show(conn, %{"trip_id" => trip_id, "activity_id" => activity_id}, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
-         {:ok, activity} <- Activities.get_activity(activity_id),
+         {:ok, activity} <- Activities.get_activity_with_interest(user, activity_id),
          :ok <-
            Bodyguard.permit(ActivityPolicy, :see_activity, user, %{trip: trip, activity: activity}) do
       render(conn, "activity.json", %{activity: activity})
@@ -149,7 +149,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
              trip: trip,
              activity: activity
            }),
-         {:ok, activity} <- Activities.update_activity(activity, attrs) do
+         {:ok, activity} <- Activities.update_activity(user, activity, attrs) do
       render(conn, "activity.json", %{activity: activity})
     end
   end
@@ -199,6 +199,65 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
            }),
          {:ok, _} <- Activities.delete_activity(activity) do
       send_resp(conn, 204, "")
+    end
+  end
+
+  @doc """
+  OpenApi spec for the update action
+  """
+  def vote_operation do
+    %Operation{
+      tags: ["activities"],
+      summary: "Vote on a specific activity",
+      description: "Vote on a specific activity",
+      operationId: "ActivityController.vote",
+      security: [%{"authorization" => []}],
+      parameters: [
+        %Parameter{
+          name: "trip_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.TripId
+        },
+        %Parameter{
+          name: "activity_id",
+          in: "path",
+          required: true,
+          schema: OpenApiSchemas.ActivityId
+        }
+      ],
+      requestBody:
+        request_body(
+          "The attributes needed to vote on an activity",
+          "application/json",
+          OpenApiSchemas.VoteOnActivityRequest,
+          required: false
+        ),
+      responses: %{
+        200 =>
+          response(
+            "Info of the updated activity",
+            "application/json",
+            OpenApiSchemas.ActivityResponse
+          )
+      }
+    }
+  end
+
+  def vote(
+        conn,
+        %{"trip_id" => trip_id, "activity_id" => activity_id, "is_interested" => is_interested},
+        %User{} = user
+      ) do
+    with {:ok, trip} <- Trips.get_trip(trip_id),
+         {:ok, activity} <- Activities.get_activity(activity_id),
+         :ok <-
+           Bodyguard.permit(ActivityPolicy, :vote_on_activity, user, %{
+             trip: trip,
+             activity: activity
+           }),
+         {:ok, activity} <- Activities.vote_on_activity(user, activity, is_interested) do
+      render(conn, "activity.json", %{activity: activity})
     end
   end
 end

@@ -50,7 +50,8 @@ defmodule TripPlannerWeb.V1.Trips.TripViewTest do
                  price_per_person_string: _,
                  notes: _,
                  start_date: _,
-                 end_date: _
+                 end_date: _,
+                 is_interested: nil
                },
                %{
                  id: ^activity2_id,
@@ -61,7 +62,8 @@ defmodule TripPlannerWeb.V1.Trips.TripViewTest do
                  price_per_person_string: _,
                  notes: _,
                  start_date: _,
-                 end_date: _
+                 end_date: _,
+                 is_interested: nil
                }
              ]
            } = TripView.render("trip.json", %{trip: trip})

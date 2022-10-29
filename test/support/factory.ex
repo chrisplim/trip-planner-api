@@ -6,5 +6,6 @@ defmodule TripPlanner.Factory do
 
   use TripPlanner.Schemas.ActivityFactory
   use TripPlanner.Schemas.TripFactory
+  use TripPlanner.Schemas.UserActivityInterestFactory
   use TripPlanner.Schemas.UserFactory
 end

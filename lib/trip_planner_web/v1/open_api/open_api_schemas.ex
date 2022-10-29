@@ -421,6 +421,22 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
     })
   end
 
+  defmodule VoteOnActivityRequest do
+    OpenApiSpex.schema(%{
+      description: "Update Activity Request information",
+      type: :object,
+      properties: %{
+        is_interested: %Schema{
+          type: :boolean,
+          description: "true/false if the user is interested in this activity, or null if not specified"
+        }
+      },
+      example: %{
+        "is_interested" => true
+      }
+    })
+  end
+
   defmodule ActivityResponse do
     OpenApiSpex.schema(%{
       description: "Activity information",
@@ -461,6 +477,10 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
           type: :integer,
           description: "End Date"
         },
+        is_interested: %Schema{
+          type: :boolean,
+          description: "true/false if the user is interested in this activity, or null if not specified"
+        },
         user: UserResponse,
         trip_id: TripId
       },
@@ -476,6 +496,7 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
         "notes" => "some note",
         "start_date" => 1_664_422_123,
         "end_date" => 1_664_422_123,
+        "is_interested" => false,
         "user" => %{
           "id" => "02ef9c5f-29e6-48fc-9ec3-7ed57ed351f6",
           "first_name" => "Joe",

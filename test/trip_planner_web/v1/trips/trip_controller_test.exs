@@ -9,7 +9,9 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
     test "authenticated user, owner of trip", %{conn: conn} do
       user = insert(:user)
       user_id = user.id
-      trip = insert(:trip, user: user, users: [user])
+      %{id: activity_id} = activity = insert(:activity)
+      insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
+      trip = insert(:trip, user: user, users: [user], activities: [activity])
       trip_id = trip.id
       trip_name = trip.name
 
@@ -26,7 +28,8 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                  "start_date" => nil,
                  "end_date" => nil,
                  "owner" => %{"id" => ^user_id},
-                 "users" => [%{"id" => ^user_id}]
+                 "users" => [%{"id" => ^user_id}],
+                 "activities" => [%{"id" => ^activity_id, "user" => %{}, "is_interested" => true}]
                }
              ] = json_response(conn, 200)
     end
@@ -76,12 +79,18 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
       user_id = user.id
       {:ok, start_date} = DateTimeConverter.from_timestamp(1_664_848_505)
 
+      [activity1, activity2] = activities = insert_pair(:activity)
+      activity1_id = activity1.id
+      activity2_id = activity2.id
+      insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
+
       trip =
         insert(:trip,
           user: user,
           name: "test_trip",
           description: "my test trip",
-          start_date: start_date
+          start_date: start_date,
+          activities: activities
         )
 
       trip_id = trip.id
@@ -98,7 +107,11 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                "start_date" => 1_664_848_505,
                "end_date" => nil,
                "owner" => %{"id" => ^user_id},
-               "users" => []
+               "users" => [],
+               "activities" => [
+                 %{"id" => ^activity1_id, "user" => %{}, "is_interested" => true},
+                 %{"id" => ^activity2_id, "user" => %{}, "is_interested" => nil}
+               ]
              } = json_response(conn, 200)
     end
 
@@ -158,7 +171,14 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
     test "authenticated user, and can update the trip", %{conn: conn} do
       user = insert(:user)
       user_id = user.id
-      trip = insert(:trip, users: [user])
+
+      [activity1, activity2] = activities = insert_pair(:activity)
+      activity1_id = activity1.id
+      activity2_id = activity2.id
+      insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
+      insert(:user_activity_interest, activity: activity2, user: user, is_interested: false)
+
+      trip = insert(:trip, users: [user], activities: activities)
       trip_id = trip.id
 
       trip_params = %{
@@ -180,7 +200,11 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                "start_date" => 1_664_848_505,
                "end_date" => 1_664_848_505,
                "owner" => %{"id" => _},
-               "users" => [%{"id" => ^user_id}]
+               "users" => [%{"id" => ^user_id}],
+               "activities" => [
+                 %{"id" => ^activity1_id, "user" => %{}, "is_interested" => true},
+                 %{"id" => ^activity2_id, "user" => %{}, "is_interested" => false}
+               ]
              } = json_response(conn, 200)
     end
 
