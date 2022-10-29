@@ -1,14 +1,84 @@
-name: Fly.io Deploy
+name: CI/CD
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches:
+      - "**"
+
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        otp-version: [25.0.4]
+        elixir-version: [1.14.0]
+
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      MIX_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost/trip_planner_test
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir-version }}
+          otp-version: ${{ matrix.otp-version }}
+
+      - uses: actions/cache@v2
+        id: deps-cache
+        with:
+          path: deps
+          key: ${{ runner.os }}-deps-${{ hashFiles(format('{0}/mix.lock', github.workspace)) }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+      - uses: actions/cache@v2
+        id: build-cache
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ matrix.otp-version }}-${{ matrix.elixir-version }}-${{ hashFiles(format('{0}/mix.lock', github.workspace)) }}
+
+      - name: Install Elixir dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+
+      - name: Compile app
+        run: mix compile
+
+      - name: Test suite
+        run: mix coveralls.lcov
+
+      - name: Report test coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
+          files: ./cover/lcov.info
   deploy:
-      name: Deploy app
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: superfly/flyctl-actions/setup-flyctl@master
-        - run: flyctl deploy --remote-only
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only

@@ -10,7 +10,14 @@ defmodule TripPlanner.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -57,7 +64,8 @@ defmodule TripPlanner.MixProject do
       {:credo_naming, "~> 1.0", only: [:dev, :test], runtime: false},
       {:assertions, "~> 0.6.1", only: [:test]},
       {:money, "~> 1.11"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:excoveralls, "~> 0.15", only: :test}
     ]
   end
 
