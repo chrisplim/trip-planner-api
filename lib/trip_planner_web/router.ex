@@ -9,7 +9,7 @@ defmodule TripPlannerWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug OpenApiSpex.Plug.PutApiSpec, module: TripPlannerWeb.OpenApi.OpenApiSpec
+    plug OpenApiSpex.Plug.PutApiSpec, module: TripPlannerWeb.V1.OpenApi.OpenApiSpec
     # plug DateParamsParserPlug
   end
 
@@ -40,6 +40,7 @@ defmodule TripPlannerWeb.Router do
   end
 
   scope "/api" do
+    pipe_through([:api])
     get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
