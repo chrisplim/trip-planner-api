@@ -100,5 +100,37 @@ defmodule TripPlanner.Trips.ActivityPolicyTest do
       activity = insert(:activity)
       assert ActivityPolicy.authorize(:delete_activity, user, %{trip: trip, activity: activity}) == {:error, :forbidden}
     end
+
+    test "owners can vote on activities if activity in trip" do
+      user = insert(:user)
+      trip = insert(:trip, user: user, users: [])
+      activity = insert(:activity, trip: trip)
+      assert ActivityPolicy.authorize(:vote_on_activity, user, %{trip: trip, activity: activity}) == :ok
+    end
+
+    test "owners cannot vote on activities if activity not in trip" do
+      user = insert(:user)
+      trip = insert(:trip, user: user, users: [])
+      activity = insert(:activity)
+
+      assert ActivityPolicy.authorize(:vote_on_activity, user, %{trip: trip, activity: activity}) ==
+               {:error, :forbidden}
+    end
+
+    test "participants can vote on activities if activity in trip" do
+      user = insert(:user)
+      trip = insert(:trip, users: [user])
+      activity = insert(:activity, trip: trip)
+      assert ActivityPolicy.authorize(:vote_on_activity, user, %{trip: trip, activity: activity}) == :ok
+    end
+
+    test "participants cannot vote on activities if activity not in trip" do
+      user = insert(:user)
+      trip = insert(:trip, users: [user])
+      activity = insert(:activity)
+
+      assert ActivityPolicy.authorize(:vote_on_activity, user, %{trip: trip, activity: activity}) ==
+               {:error, :forbidden}
+    end
   end
 end

@@ -101,7 +101,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   end
 
   def show(conn, %{"trip_id" => trip_id}, %User{} = user) do
-    with {:ok, trip} <- Trips.get_trip(trip_id),
+    with {:ok, trip} <- Trips.get_trip_with_activities_preloads(user, trip_id),
          :ok <- Bodyguard.permit(TripPolicy, :see_trip, user, trip) do
       render(conn, "trip.json", %{trip: trip})
     end
@@ -146,7 +146,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def update(conn, %{"trip_id" => trip_id} = attrs, %User{} = user) do
     with {:ok, trip} <- Trips.get_trip(trip_id),
          :ok <- Bodyguard.permit(TripPolicy, :update_trip, user, trip),
-         {:ok, trip} <- Trips.update_trip(trip, attrs) do
+         {:ok, trip} <- Trips.update_trip(user, trip, attrs) do
       render(conn, "trip.json", %{trip: trip})
     end
   end

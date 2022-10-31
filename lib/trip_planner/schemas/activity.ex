@@ -19,6 +19,8 @@ defmodule TripPlanner.Schemas.Activity do
     belongs_to(:user, User, on_replace: :nilify)
     belongs_to(:trip, Trip, on_replace: :nilify)
 
+    field(:is_interested, :boolean, virtual: true)
+
     timestamps(type: :utc_datetime)
   end
 

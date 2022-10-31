@@ -37,6 +37,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityViewTest do
              notes: "test notes",
              start_date: ^expected_datetime_int,
              end_date: ^expected_datetime_int,
+             is_interested: nil,
              user: %{id: ^user_id, first_name: _, last_name: _, email: _, phone: _, username: _}
            } = ActivityView.render("activity.json", %{activity: activity})
   end
@@ -54,7 +55,8 @@ defmodule TripPlannerWeb.V1.Trips.ActivityViewTest do
         price_per_person: nil,
         notes: "test notes",
         start_date: datetime,
-        end_date: datetime
+        end_date: datetime,
+        is_interested: true
       )
 
     user_id = activity.user.id
@@ -70,6 +72,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityViewTest do
              notes: "test notes",
              start_date: ^expected_datetime_int,
              end_date: ^expected_datetime_int,
+             is_interested: true,
              user: %{id: ^user_id, first_name: _, last_name: _, email: _, phone: _, username: _}
            } = ActivityView.render("activity.json", %{activity: activity})
   end

@@ -75,6 +75,8 @@ defmodule TripPlannerWeb.Router do
         resources "/activities", ActivityController,
           only: [:create, :show, :update, :delete],
           param: "activity_id"
+
+        post("/activities/:activity_id/vote", ActivityController, :vote)
       end
     end
   end
