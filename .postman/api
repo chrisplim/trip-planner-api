@@ -11,8 +11,8 @@ files[] = {"id":"13576755-ad4d9442-d819-4a0a-95bf-a70231e7d07c","path":"trip_pla
 
 [relations.apiDefinition]
 rootDirectory = postman/schemas
-files[] = {"path":"index.json","metaData":{}}
+files[] = {"path":"openapi.json","metaData":{}}
 
 [relations.apiDefinition.metaData]
 type = openapi:3
-rootFiles[] = index.json
+rootFiles[] = openapi.json
