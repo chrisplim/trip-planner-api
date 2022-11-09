@@ -81,8 +81,10 @@ defmodule TripPlanner.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "openapi.json": ["openapi.spec.json --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec"],
-      "openapi.yaml": ["openapi.spec.yaml --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec"]
+      "openapi.json": [
+        "openapi.spec.json --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec --pretty=true postman/schemas/openapi.json"
+      ],
+      "openapi.yaml": ["openapi.spec.yaml --spec TripPlannerWeb.V1.OpenApi.OpenApiSpec --pretty=true"]
     ]
   end
 end

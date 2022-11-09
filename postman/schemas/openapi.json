@@ -744,6 +744,40 @@
         ]
       }
     },
+    "/api/v1/sessions/logout": {
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "Logout by deleting the user's token",
+        "operationId": "SessionController.logout",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "description": "The attributes needed to logout",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "204"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Logout by deleting the user's token",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
     "/api/v1/sessions/refresh_token": {
       "post": {
         "callbacks": {},
