@@ -21,3 +21,5 @@ benchee.exs
 
 secrets
 *.local
+
+openapi.json

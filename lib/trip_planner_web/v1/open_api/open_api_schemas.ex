@@ -158,6 +158,10 @@ defmodule TripPlannerWeb.V1.OpenApi.OpenApiSchemas do
     })
   end
 
+  defmodule LogoutRequest do
+    defdelegate schema(), to: RefreshTokenRequest
+  end
+
   defmodule TripId do
     OpenApiSpex.schema(%{
       description: "Trip id",

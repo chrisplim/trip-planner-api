@@ -2,6 +2,7 @@ defmodule TripPlanner.Auth.Auth do
   import Ecto.Query, only: [from: 2]
   alias TripPlanner.Repo
   alias TripPlanner.Schemas.User
+  alias TripPlanner.Users.Users
   alias TripPlannerWeb.Guardian
 
   def authenticate_user(username, plain_text_password) do
@@ -27,5 +28,9 @@ defmodule TripPlanner.Auth.Auth do
            Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {2, :weeks}) do
       {:ok, %{access_token: access_token, refresh_token: refresh_token}}
     end
+  end
+
+  def delete_token_for_user(%User{} = user) do
+    Users.update_refresh_token(user, nil)
   end
 end

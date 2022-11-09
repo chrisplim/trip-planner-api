@@ -50,7 +50,7 @@ defmodule TripPlannerWeb.V1.Sessions.SessionController do
   end
 
   @doc """
-  OpenApi spec for the get_user_me action
+  OpenApi spec for the refresh_token action
   """
   def refresh_token_operation do
     %Operation{
@@ -97,6 +97,50 @@ defmodule TripPlannerWeb.V1.Sessions.SessionController do
   end
 
   def refresh_token(_, _, _) do
+    {:error, :unauthorized}
+  end
+
+  @doc """
+  OpenApi spec for the logout action
+  """
+  def logout_operation do
+    %Operation{
+      tags: ["sessions"],
+      summary: "Logout by deleting the user's token",
+      description: "Logout by deleting the user's token",
+      operationId: "SessionController.logout",
+      security: [%{"authorization" => []}],
+      requestBody:
+        request_body(
+          "The attributes needed to logout",
+          "application/json",
+          OpenApiSchemas.LogoutRequest,
+          required: true
+        ),
+      responses: %{
+        204 =>
+          response(
+            "204",
+            nil,
+            OpenApiSchemas.OkResponse
+          )
+      }
+    }
+  end
+
+  def logout(
+        conn,
+        %{"refresh_token" => refresh_token},
+        %User{jwt_refresh_token: refresh_token} = user
+      ) do
+    with {:ok, _} <- Auth.delete_token_for_user(user) do
+      send_resp(conn, 204, "")
+    else
+      _ -> {:error, :unauthorized}
+    end
+  end
+
+  def logout(_, _, _) do
     {:error, :unauthorized}
   end
 end
