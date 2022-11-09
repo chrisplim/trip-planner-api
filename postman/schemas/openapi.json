@@ -813,7 +813,7 @@
             "authorization": []
           }
         ],
-        "summary": "Refresh the current user's auth tokens",
+        "summary": "Refresh tokens",
         "tags": [
           "sessions"
         ]
@@ -843,7 +843,7 @@
             "authorization": []
           }
         ],
-        "summary": "Get all trips of current user",
+        "summary": "Get all trips",
         "tags": [
           "trips"
         ]
@@ -882,7 +882,7 @@
             "authorization": []
           }
         ],
-        "summary": "Create a trip",
+        "summary": "Create trip",
         "tags": [
           "trips"
         ]
@@ -914,7 +914,7 @@
             "authorization": []
           }
         ],
-        "summary": "Delete a specific trip",
+        "summary": "Delete trip",
         "tags": [
           "trips"
         ]
@@ -951,7 +951,7 @@
             "authorization": []
           }
         ],
-        "summary": "Get a trip by an ID",
+        "summary": "Get trip",
         "tags": [
           "trips"
         ]
@@ -999,7 +999,7 @@
             "authorization": []
           }
         ],
-        "summary": "Update a specific trip",
+        "summary": "Update trip",
         "tags": [
           "trips"
         ]
@@ -1047,7 +1047,7 @@
             "authorization": []
           }
         ],
-        "summary": "Update a specific trip",
+        "summary": "Update trip",
         "tags": [
           "trips"
         ]
@@ -1097,7 +1097,7 @@
             "authorization": []
           }
         ],
-        "summary": "Create an activity",
+        "summary": "Create activity",
         "tags": [
           "activities"
         ]
@@ -1137,7 +1137,7 @@
             "authorization": []
           }
         ],
-        "summary": "Delete a specific activity",
+        "summary": "Delete activity",
         "tags": [
           "activities"
         ]
@@ -1182,7 +1182,7 @@
             "authorization": []
           }
         ],
-        "summary": "Get a activity by an ID",
+        "summary": "Get activity",
         "tags": [
           "activities"
         ]
@@ -1238,7 +1238,7 @@
             "authorization": []
           }
         ],
-        "summary": "Update a specific activity",
+        "summary": "Update activity",
         "tags": [
           "activities"
         ]
@@ -1294,7 +1294,7 @@
             "authorization": []
           }
         ],
-        "summary": "Update a specific activity",
+        "summary": "Update activity",
         "tags": [
           "activities"
         ]
@@ -1352,7 +1352,7 @@
             "authorization": []
           }
         ],
-        "summary": "Vote on a specific activity",
+        "summary": "Vote on activity",
         "tags": [
           "activities"
         ]
@@ -1382,7 +1382,7 @@
             "authorization": []
           }
         ],
-        "summary": "Get current user information",
+        "summary": "Get current user info",
         "tags": [
           "users"
         ]
