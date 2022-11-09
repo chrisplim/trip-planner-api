@@ -63,6 +63,7 @@ defmodule TripPlannerWeb.Router do
 
       scope "/sessions" do
         post("/refresh_token", SessionController, :refresh_token)
+        post("/logout", SessionController, :logout)
       end
 
       scope "/users" do

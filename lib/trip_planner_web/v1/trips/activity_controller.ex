@@ -203,7 +203,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   end
 
   @doc """
-  OpenApi spec for the update action
+  OpenApi spec for the vote action
   """
   def vote_operation do
     %Operation{
