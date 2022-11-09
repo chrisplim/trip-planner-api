@@ -5,7 +5,7 @@ id = 4df041d6-b03c-4c77-aead-deb7dfb9a46a
 
 [relations.collections]
 rootDirectory = postman/collections
-files[] = {"id":"13576755-ad4d9442-d819-4a0a-95bf-a70231e7d07c","path":"trip_planner_api.json","metaData":{}}
+files[] = {"id":"13576755-294c09bb-113c-4e04-aff5-bbec5dd7bed4","path":"trip_planner_api.json","metaData":{}}
 
 [relations.collections.metaData]
 

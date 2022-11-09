@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "ad4d9442-d819-4a0a-95bf-a70231e7d07c",
+		"_postman_id": "294c09bb-113c-4e04-aff5-bbec5dd7bed4",
 		"name": "trip_planner_api",
 		"description": "The API for the Trip Planner App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "13576755-ad4d9442-d819-4a0a-95bf-a70231e7d07c"
+		"_uid": "13576755-294c09bb-113c-4e04-aff5-bbec5dd7bed4"
 	},
 	"item": [
 		{
@@ -15,7 +15,7 @@
 					"item": [
 						{
 							"name": "Login",
-							"id": "7bf03c1c-44db-4091-a0d7-4714fe914f29",
+							"id": "afda3b5d-9fbe-468a-846c-36b5605bbfa1",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -56,20 +56,11 @@
 							},
 							"response": [
 								{
-									"id": "ece31968-a054-4c03-8e32-2f11bb2c6267",
+									"id": "1a330bf8-67c8-441d-99ce-d7fec56379a9",
 									"name": "User info and Auth tokens",
 									"originalRequest": {
 										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
+										"header": [],
 										"body": {
 											"mode": "raw",
 											"raw": "{\n  \"password\": \"bruin1919\",\n  \"username\": \"joebruin\"\n}",
@@ -90,8 +81,7 @@
 												"sessions",
 												"login"
 											]
-										},
-										"description": "Login"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -108,8 +98,8 @@
 							]
 						},
 						{
-							"name": "Refresh the current user's auth tokens",
-							"id": "c9e2a74c-d45e-48dd-b290-5dc44f0f5b9c",
+							"name": "Logout",
+							"id": "46f0006b-ff94-46ca-a7f3-f798f31a91bc",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -119,7 +109,103 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{ACCESS_TOKEN}}",
+											"value": "<Bearer Token>",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/sessions/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sessions",
+										"logout"
+									]
+								},
+								"description": "Logout by deleting the user's token"
+							},
+							"response": [
+								{
+									"id": "158f7f4d-5e24-4744-8f45-e680f2d2ab9a",
+									"name": "204",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/sessions/logout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"sessions",
+												"logout"
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Refresh tokens",
+							"id": "36778dc6-dd66-4156-9718-3a49636ddd9c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "<Bearer Token>",
 											"type": "string"
 										}
 									]
@@ -160,28 +246,15 @@
 							},
 							"response": [
 								{
-									"id": "0feeaebb-af27-4609-966b-192d0cb09d27",
+									"id": "fb5a85c9-dd5e-4beb-b257-e61c0401dc86",
 									"name": "Auth tokens",
 									"originalRequest": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [
 											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
 											}
 										],
 										"body": {
@@ -204,8 +277,7 @@
 												"sessions",
 												"refresh_token"
 											]
-										},
-										"description": "Refresh the current user's auth tokens"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -222,7 +294,7 @@
 							]
 						}
 					],
-					"id": "42ccbbc6-8d8f-4e10-a354-3afedad62a20"
+					"id": "c2d34fbe-2015-4dd0-a1f8-269fc281aa6f"
 				},
 				{
 					"name": "trips",
@@ -237,8 +309,8 @@
 											"name": "{activity id}",
 											"item": [
 												{
-													"name": "Delete a specific activity",
-													"id": "045d9c12-2813-4396-b440-8e28e1c0096f",
+													"name": "Delete activity",
+													"id": "f394ee40-18f5-4f5b-974b-d59ba7ccbfd5",
 													"protocolProfileBehavior": {
 														"disableBodyPruning": true
 													},
@@ -248,7 +320,7 @@
 															"bearer": [
 																{
 																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
+																	"value": "<Bearer Token>",
 																	"type": "string"
 																}
 															]
@@ -285,21 +357,17 @@
 													},
 													"response": [
 														{
-															"id": "b4b17ade-b075-45d1-bd5b-d69280ee8707",
+															"id": "cfbcb01c-5558-4ebe-84dd-ea6090fa09a5",
 															"name": "204",
 															"originalRequest": {
-																"auth": {
-																	"type": "bearer",
-																	"bearer": [
-																		{
-																			"key": "token",
-																			"value": "{{ACCESS_TOKEN}}",
-																			"type": "string"
-																		}
-																	]
-																},
 																"method": "DELETE",
-																"header": [],
+																"header": [
+																	{
+																		"description": "Added as a part of security scheme: bearer",
+																		"key": "Authorization",
+																		"value": "Bearer <token>"
+																	}
+																],
 																"url": {
 																	"raw": "{{baseUrl}}/api/v1/trips/:trip_id/activities/:activity_id",
 																	"host": [
@@ -325,8 +393,7 @@
 																			"description": "(Required) "
 																		}
 																	]
-																},
-																"description": "Delete a specific activity"
+																}
 															},
 															"status": "No Content",
 															"code": 204,
@@ -343,8 +410,8 @@
 													]
 												},
 												{
-													"name": "Get a activity by an ID",
-													"id": "5decbea4-78bb-4e8d-b353-ea22ef8ba06b",
+													"name": "Get activity",
+													"id": "6c04cf96-28fd-40db-8be6-b07f9ffa776e",
 													"protocolProfileBehavior": {
 														"disableBodyPruning": true
 													},
@@ -354,7 +421,7 @@
 															"bearer": [
 																{
 																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
+																	"value": "<Bearer Token>",
 																	"type": "string"
 																}
 															]
@@ -396,24 +463,15 @@
 													},
 													"response": [
 														{
-															"id": "a496b18a-fb2f-481a-abdc-ec9ab7a67074",
+															"id": "24885cac-6a92-41b5-83d5-5666c7a279eb",
 															"name": "Info of the activity",
 															"originalRequest": {
-																"auth": {
-																	"type": "bearer",
-																	"bearer": [
-																		{
-																			"key": "token",
-																			"value": "{{ACCESS_TOKEN}}",
-																			"type": "string"
-																		}
-																	]
-																},
 																"method": "GET",
 																"header": [
 																	{
-																		"key": "Accept",
-																		"value": "application/json"
+																		"description": "Added as a part of security scheme: bearer",
+																		"key": "Authorization",
+																		"value": "Bearer <token>"
 																	}
 																],
 																"url": {
@@ -441,8 +499,7 @@
 																			"description": "(Required) "
 																		}
 																	]
-																},
-																"description": "Get a activity by an ID"
+																}
 															},
 															"status": "OK",
 															"code": 200,
@@ -459,8 +516,8 @@
 													]
 												},
 												{
-													"name": "Update a specific activity",
-													"id": "518856a4-6d1a-4ddc-a4d5-861f4a6d0435",
+													"name": "Update activity",
+													"id": "cacda3f0-73b8-4cc8-bf2f-9a5ec0a0d6ad",
 													"protocolProfileBehavior": {
 														"disableBodyPruning": true
 													},
@@ -470,7 +527,7 @@
 															"bearer": [
 																{
 																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
+																	"value": "<Bearer Token>",
 																	"type": "string"
 																}
 															]
@@ -525,28 +582,15 @@
 													},
 													"response": [
 														{
-															"id": "12afcebe-d7d2-4ab4-8cf6-923fca503851",
+															"id": "228c4c72-1463-4863-883d-12920eb0167f",
 															"name": "Info of the updated activity",
 															"originalRequest": {
-																"auth": {
-																	"type": "bearer",
-																	"bearer": [
-																		{
-																			"key": "token",
-																			"value": "{{ACCESS_TOKEN}}",
-																			"type": "string"
-																		}
-																	]
-																},
 																"method": "PATCH",
 																"header": [
 																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
+																		"description": "Added as a part of security scheme: bearer",
+																		"key": "Authorization",
+																		"value": "Bearer <token>"
 																	}
 																],
 																"body": {
@@ -583,8 +627,7 @@
 																			"description": "(Required) "
 																		}
 																	]
-																},
-																"description": "Update a specific activity"
+																}
 															},
 															"status": "OK",
 															"code": 200,
@@ -601,8 +644,8 @@
 													]
 												},
 												{
-													"name": "Update a specific activity",
-													"id": "430222fc-ecff-450e-8d71-a88f9ea0b6d4",
+													"name": "Update activity",
+													"id": "5289bb80-5296-4e0f-93c6-d1de21a31f0b",
 													"protocolProfileBehavior": {
 														"disableBodyPruning": true
 													},
@@ -612,7 +655,7 @@
 															"bearer": [
 																{
 																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
+																	"value": "<Bearer Token>",
 																	"type": "string"
 																}
 															]
@@ -667,28 +710,15 @@
 													},
 													"response": [
 														{
-															"id": "8179b34d-3e67-4890-b742-d046ed419f7f",
+															"id": "71b935bb-13fb-4c06-95dc-0ba12e364578",
 															"name": "Info of the updated activity",
 															"originalRequest": {
-																"auth": {
-																	"type": "bearer",
-																	"bearer": [
-																		{
-																			"key": "token",
-																			"value": "{{ACCESS_TOKEN}}",
-																			"type": "string"
-																		}
-																	]
-																},
 																"method": "PUT",
 																"header": [
 																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
+																		"description": "Added as a part of security scheme: bearer",
+																		"key": "Authorization",
+																		"value": "Bearer <token>"
 																	}
 																],
 																"body": {
@@ -725,8 +755,7 @@
 																			"description": "(Required) "
 																		}
 																	]
-																},
-																"description": "Update a specific activity"
+																}
 															},
 															"status": "OK",
 															"code": 200,
@@ -743,8 +772,8 @@
 													]
 												},
 												{
-													"name": "Vote on a specific activity",
-													"id": "2738995d-d35c-4306-8e79-91be9cd95213",
+													"name": "Vote on activity",
+													"id": "3767337a-e8cf-47d6-aa9b-474e85394692",
 													"protocolProfileBehavior": {
 														"disableBodyPruning": true
 													},
@@ -754,7 +783,7 @@
 															"bearer": [
 																{
 																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
+																	"value": "<Bearer Token>",
 																	"type": "string"
 																}
 															]
@@ -810,28 +839,15 @@
 													},
 													"response": [
 														{
-															"id": "1ac22e61-475f-4783-a7c1-f42fd79de824",
+															"id": "313ab47b-82b3-4346-b033-7ec5492e9f61",
 															"name": "Info of the updated activity",
 															"originalRequest": {
-																"auth": {
-																	"type": "bearer",
-																	"bearer": [
-																		{
-																			"key": "token",
-																			"value": "{{ACCESS_TOKEN}}",
-																			"type": "string"
-																		}
-																	]
-																},
 																"method": "POST",
 																"header": [
 																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
+																		"description": "Added as a part of security scheme: bearer",
+																		"key": "Authorization",
+																		"value": "Bearer <token>"
 																	}
 																],
 																"body": {
@@ -869,8 +885,7 @@
 																			"description": "(Required) "
 																		}
 																	]
-																},
-																"description": "Vote on a specific activity"
+																}
 															},
 															"status": "OK",
 															"code": 200,
@@ -887,11 +902,11 @@
 													]
 												}
 											],
-											"id": "a542d08e-b294-4ced-ad7a-e235593b2780"
+											"id": "6ba4f0bc-dd62-41eb-aad0-6e35f477f293"
 										},
 										{
-											"name": "Create an activity",
-											"id": "4ff13ae9-d446-4b59-bd13-0d991ba881bd",
+											"name": "Create activity",
+											"id": "41aebf29-aa43-4e3d-864c-8b6a400a7e9b",
 											"protocolProfileBehavior": {
 												"disableBodyPruning": true
 											},
@@ -901,7 +916,7 @@
 													"bearer": [
 														{
 															"key": "token",
-															"value": "{{ACCESS_TOKEN}}",
+															"value": "<Bearer Token>",
 															"type": "string"
 														}
 													]
@@ -950,28 +965,15 @@
 											},
 											"response": [
 												{
-													"id": "346c3eb1-ee72-4dd3-abbb-ea7601fee4ed",
+													"id": "3da383ab-e57e-435c-ac18-8a287f4a2e02",
 													"name": "Info of the created activity",
 													"originalRequest": {
-														"auth": {
-															"type": "bearer",
-															"bearer": [
-																{
-																	"key": "token",
-																	"value": "{{ACCESS_TOKEN}}",
-																	"type": "string"
-																}
-															]
-														},
 														"method": "POST",
 														"header": [
 															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
 															}
 														],
 														"body": {
@@ -1002,8 +1004,7 @@
 																	"description": "(Required) "
 																}
 															]
-														},
-														"description": "Create an activity"
+														}
 													},
 													"status": "OK",
 													"code": 200,
@@ -1020,11 +1021,11 @@
 											]
 										}
 									],
-									"id": "dc046325-003a-4c95-b0a5-2732583523e0"
+									"id": "1f8e21a8-4ddd-4e3d-900a-898c0eda6cb2"
 								},
 								{
-									"name": "Delete a specific trip",
-									"id": "c40c1f7a-3eb1-4c6b-8684-58c03c12b61e",
+									"name": "Delete trip",
+									"id": "246cf9f5-61fb-444a-b9a6-84be2c719749",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -1034,7 +1035,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
+													"value": "<Bearer Token>",
 													"type": "string"
 												}
 											]
@@ -1064,21 +1065,17 @@
 									},
 									"response": [
 										{
-											"id": "3e15ecbb-8fe7-4dc3-a548-adc192665d40",
+											"id": "c4883e77-46a2-44d7-a8d8-92939ffd2531",
 											"name": "204",
 											"originalRequest": {
-												"auth": {
-													"type": "bearer",
-													"bearer": [
-														{
-															"key": "token",
-															"value": "{{ACCESS_TOKEN}}",
-															"type": "string"
-														}
-													]
-												},
 												"method": "DELETE",
-												"header": [],
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
 												"url": {
 													"raw": "{{baseUrl}}/api/v1/trips/:trip_id",
 													"host": [
@@ -1097,8 +1094,7 @@
 															"description": "(Required) "
 														}
 													]
-												},
-												"description": "Delete a specific trip"
+												}
 											},
 											"status": "No Content",
 											"code": 204,
@@ -1115,8 +1111,8 @@
 									]
 								},
 								{
-									"name": "Get a trip by an ID",
-									"id": "2980a9e3-8947-4eef-a93f-46a0cb5a4706",
+									"name": "Get trip",
+									"id": "c276a4aa-1a6f-4623-ba66-be3dd55e19d5",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -1126,7 +1122,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
+													"value": "<Bearer Token>",
 													"type": "string"
 												}
 											]
@@ -1161,24 +1157,15 @@
 									},
 									"response": [
 										{
-											"id": "71b63917-13bf-4327-bdbd-31b24fae403f",
+											"id": "60ee78ee-e6ef-41c3-a8bc-34159e05c768",
 											"name": "Info of the trip",
 											"originalRequest": {
-												"auth": {
-													"type": "bearer",
-													"bearer": [
-														{
-															"key": "token",
-															"value": "{{ACCESS_TOKEN}}",
-															"type": "string"
-														}
-													]
-												},
 												"method": "GET",
 												"header": [
 													{
-														"key": "Accept",
-														"value": "application/json"
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
 													}
 												],
 												"url": {
@@ -1199,8 +1186,7 @@
 															"description": "(Required) "
 														}
 													]
-												},
-												"description": "Get a trip by an ID"
+												}
 											},
 											"status": "OK",
 											"code": 200,
@@ -1217,8 +1203,8 @@
 									]
 								},
 								{
-									"name": "Update a specific trip",
-									"id": "0d87f837-c768-4199-9f73-40b5bac8eb45",
+									"name": "Update trip",
+									"id": "9c74c7fb-ce2e-4e72-b9d4-ddeef9f9893d",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -1228,7 +1214,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
+													"value": "<Bearer Token>",
 													"type": "string"
 												}
 											]
@@ -1276,28 +1262,15 @@
 									},
 									"response": [
 										{
-											"id": "f023bca3-256f-48e0-84d4-93ed8baae1b6",
+											"id": "9500a875-c7b1-4014-9731-d7fcfef62064",
 											"name": "Info of the updated trip",
 											"originalRequest": {
-												"auth": {
-													"type": "bearer",
-													"bearer": [
-														{
-															"key": "token",
-															"value": "{{ACCESS_TOKEN}}",
-															"type": "string"
-														}
-													]
-												},
 												"method": "PATCH",
 												"header": [
 													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
 													}
 												],
 												"body": {
@@ -1327,8 +1300,7 @@
 															"description": "(Required) "
 														}
 													]
-												},
-												"description": "Update a specific trip"
+												}
 											},
 											"status": "OK",
 											"code": 200,
@@ -1345,8 +1317,8 @@
 									]
 								},
 								{
-									"name": "Update a specific trip",
-									"id": "e7871573-4181-4b78-b5ed-04d70e57bb20",
+									"name": "Update trip",
+									"id": "e1a929a6-85cf-4cb6-8c92-c03e11952d3b",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -1356,7 +1328,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
+													"value": "<Bearer Token>",
 													"type": "string"
 												}
 											]
@@ -1404,28 +1376,15 @@
 									},
 									"response": [
 										{
-											"id": "ccb726c3-96fc-4882-a229-05839be6b078",
+											"id": "5fd5febc-504f-4642-bfc3-a66fa4f12b29",
 											"name": "Info of the updated trip",
 											"originalRequest": {
-												"auth": {
-													"type": "bearer",
-													"bearer": [
-														{
-															"key": "token",
-															"value": "{{ACCESS_TOKEN}}",
-															"type": "string"
-														}
-													]
-												},
 												"method": "PUT",
 												"header": [
 													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
 													}
 												],
 												"body": {
@@ -1455,8 +1414,7 @@
 															"description": "(Required) "
 														}
 													]
-												},
-												"description": "Update a specific trip"
+												}
 											},
 											"status": "OK",
 											"code": 200,
@@ -1473,11 +1431,11 @@
 									]
 								}
 							],
-							"id": "57361ee5-96f4-4b31-a3ca-72afb7ef2610"
+							"id": "6b778c09-ba6c-4d07-ac83-4f3f015dbea6"
 						},
 						{
-							"name": "Get all trips of current user",
-							"id": "aacc0990-fd6e-4109-b989-438516ad9411",
+							"name": "Get all trips",
+							"id": "1653cb5d-f829-4da8-a586-0c73660a476c",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1487,7 +1445,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{ACCESS_TOKEN}}",
+											"value": "<Bearer Token>",
 											"type": "string"
 										}
 									]
@@ -1514,24 +1472,15 @@
 							},
 							"response": [
 								{
-									"id": "de8739c0-b9fd-4c85-81b7-8a476ee2894e",
+									"id": "254c3c03-9188-4481-9c82-e3d0aa0c8c8f",
 									"name": "List of trips of current user",
 									"originalRequest": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [
 											{
-												"key": "Accept",
-												"value": "application/json"
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
 											}
 										],
 										"url": {
@@ -1544,8 +1493,7 @@
 												"v1",
 												"trips"
 											]
-										},
-										"description": "Get all trips of current user"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -1562,8 +1510,8 @@
 							]
 						},
 						{
-							"name": "Create a trip",
-							"id": "83e36b14-7108-43df-b499-b84fb6d10897",
+							"name": "Create trip",
+							"id": "23f4b821-b231-4510-82fa-d740ad1c9560",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1573,7 +1521,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{ACCESS_TOKEN}}",
+											"value": "<Bearer Token>",
 											"type": "string"
 										}
 									]
@@ -1613,28 +1561,15 @@
 							},
 							"response": [
 								{
-									"id": "cc99325a-d0f1-46fb-9391-925db4df1743",
+									"id": "08555baf-3c5c-4f79-be4e-10e059ef2f9b",
 									"name": "Info of the created trip",
 									"originalRequest": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [
 											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
 											}
 										],
 										"body": {
@@ -1656,8 +1591,7 @@
 												"v1",
 												"trips"
 											]
-										},
-										"description": "Create a trip"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -1674,14 +1608,14 @@
 							]
 						}
 					],
-					"id": "d4c1e0e8-5bfd-4d57-a5dc-b7efe83361bd"
+					"id": "18c464c1-7f85-492f-97e0-75edd3baf016"
 				},
 				{
 					"name": "users",
 					"item": [
 						{
-							"name": "Get current user information",
-							"id": "687cf3f6-2591-4c49-a162-07de18903996",
+							"name": "Get current user info",
+							"id": "8b51d804-1949-40a8-b38a-20b800366e05",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1691,7 +1625,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{ACCESS_TOKEN}}",
+											"value": "<Bearer Token>",
 											"type": "string"
 										}
 									]
@@ -1719,24 +1653,15 @@
 							},
 							"response": [
 								{
-									"id": "8fdbb25d-93fe-441e-93f7-b60524bb5998",
+									"id": "5fe6eb30-9341-4d24-b033-03b2bd4d08bd",
 									"name": "Current User Response",
 									"originalRequest": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{ACCESS_TOKEN}}",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [
 											{
-												"key": "Accept",
-												"value": "application/json"
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
 											}
 										],
 										"url": {
@@ -1750,8 +1675,7 @@
 												"users",
 												"me"
 											]
-										},
-										"description": "Get current user information"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -1769,7 +1693,7 @@
 						},
 						{
 							"name": "Register new user",
-							"id": "d52a9d37-1c39-478f-ba51-328022660cfd",
+							"id": "49228714-11a9-484c-bdd7-c9ad60783804",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1810,20 +1734,11 @@
 							},
 							"response": [
 								{
-									"id": "2d5a88e9-44a5-48cd-9188-b0681d8e7353",
+									"id": "480c5689-f658-496c-81d6-0b51e7e8bce7",
 									"name": "User info and Auth tokens",
 									"originalRequest": {
 										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
+										"header": [],
 										"body": {
 											"mode": "raw",
 											"raw": "{\n  \"email\": \"joebruin@gmail.com\",\n  \"first_name\": \"Joe\",\n  \"last_name\": \"Bruin\",\n  \"password\": \"bruin1919\",\n  \"phone\": \"3101234567\",\n  \"username\": \"joebruin\"\n}",
@@ -1844,8 +1759,7 @@
 												"users",
 												"register"
 											]
-										},
-										"description": "Register new user"
+										}
 									},
 									"status": "OK",
 									"code": 200,
@@ -1862,15 +1776,15 @@
 							]
 						}
 					],
-					"id": "0f0dce60-786c-4c00-a2a8-337909fc8d3a"
+					"id": "f70881a1-e7bd-445e-a2cd-6c190af209e1"
 				}
 			],
-			"id": "18216b36-a3b1-4ca1-957f-9bd706a05b6c"
+			"id": "6eb0b7de-aead-4cf0-916b-2d8320409586"
 		}
 	],
 	"variable": [
 		{
-			"id": "fda1b11d-adfb-4cc3-b8fb-107ccb398744",
+			"id": "58a7d105-96eb-422f-996e-31195af70df2",
 			"key": "baseUrl",
 			"value": "http://localhost:4000",
 			"type": "string"
