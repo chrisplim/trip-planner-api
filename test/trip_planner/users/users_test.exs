@@ -109,6 +109,25 @@ defmodule TripPlanner.Users.UsersTest do
     end
   end
 
+  describe "get_logged_in_user" do
+    test "existing user with jwt_refresh_token should return a user" do
+      user = insert(:user, jwt_refresh_token: "token")
+      user_id = user.id
+      assert {:ok, %User{id: ^user_id}} = Users.get_logged_in_user(user_id)
+    end
+
+    test "existing user, but with nil jwt_refresh_token should return error" do
+      user = insert(:user)
+      user_id = user.id
+      assert {:error, :not_found} = Users.get_logged_in_user(user_id)
+    end
+
+    test "non-existent user_id should return not_found error" do
+      user_id = Faker.UUID.v4()
+      assert {:error, :not_found} = Users.get_logged_in_user(user_id)
+    end
+  end
+
   describe "update_refresh_token" do
     test "jwt_refresh_token is updated" do
       user = insert(:user)
@@ -118,11 +137,11 @@ defmodule TripPlanner.Users.UsersTest do
       {:ok, %User{id: ^user_id, jwt_refresh_token: ^refresh_token}} = Users.update_refresh_token(user, refresh_token)
     end
 
-    test "missing jwt_refresh_token should return error changeset" do
+    test "nil jwt_refresh_token is ok" do
       user = insert(:user)
+      user_id = user.id
 
-      {:error, %Ecto.Changeset{errors: [jwt_refresh_token: {"can't be blank", [validation: :required]}]}} =
-        Users.update_refresh_token(user, "")
+      {:ok, %User{id: ^user_id, jwt_refresh_token: nil}} = Users.update_refresh_token(user, nil)
     end
 
     test "existing jwt_refresh_token should return error changeset" do

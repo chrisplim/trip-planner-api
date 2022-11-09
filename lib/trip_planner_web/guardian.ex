@@ -13,7 +13,7 @@ defmodule TripPlannerWeb.Guardian do
   end
 
   def resource_from_claims(%{"sub" => user_id}) do
-    case Users.get_user(user_id) do
+    case Users.get_logged_in_user(user_id) do
       {:ok, user} -> {:ok, user}
       _ -> {:error, :resource_not_found}
     end

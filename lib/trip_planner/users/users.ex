@@ -20,6 +20,14 @@ defmodule TripPlanner.Users.Users do
     end
   end
 
+  def get_logged_in_user(user_id) do
+    case Repo.get(User, user_id) do
+      nil -> {:error, :not_found}
+      %User{jwt_refresh_token: nil} -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
   def update_refresh_token(user, refresh_token) do
     user
     |> User.refresh_token_changeset(%{jwt_refresh_token: refresh_token})

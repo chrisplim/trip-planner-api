@@ -35,22 +35,17 @@ defmodule TripPlanner.Schemas.User do
   def refresh_token_changeset(user, attrs) do
     user
     |> cast(attrs, [:jwt_refresh_token])
-    |> validate_required([:jwt_refresh_token])
     |> unique_constraint(:jwt_refresh_token)
   end
 
   defp validate_email(changeset) do
     changeset
     # rudimentary email format check
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
-      message: "must have no whitespace and must contain the @ symbol"
-    )
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have no whitespace and must contain the @ symbol")
     |> unique_constraint(:email)
   end
 
-  defp put_password_hash(
-         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
-       ) do
+  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     change(changeset, password_hash: Argon2.hash_pwd_salt(password))
   end
 
