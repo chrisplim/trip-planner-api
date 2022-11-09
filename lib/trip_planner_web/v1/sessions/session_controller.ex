@@ -55,7 +55,7 @@ defmodule TripPlannerWeb.V1.Sessions.SessionController do
   def refresh_token_operation do
     %Operation{
       tags: ["sessions"],
-      summary: "Refresh the current user's auth tokens",
+      summary: "Refresh tokens",
       description: "Refresh the current user's auth tokens",
       operationId: "SessionController.refresh_token",
       security: [%{"authorization" => []}],
@@ -106,7 +106,7 @@ defmodule TripPlannerWeb.V1.Sessions.SessionController do
   def logout_operation do
     %Operation{
       tags: ["sessions"],
-      summary: "Logout by deleting the user's token",
+      summary: "Logout",
       description: "Logout by deleting the user's token",
       operationId: "SessionController.logout",
       security: [%{"authorization" => []}],

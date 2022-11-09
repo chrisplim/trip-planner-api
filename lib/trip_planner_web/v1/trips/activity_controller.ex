@@ -17,7 +17,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def create_operation do
     %Operation{
       tags: ["activities"],
-      summary: "Create an activity",
+      summary: "Create activity",
       description: "Create an activity",
       operationId: "ActivityController.create",
       security: [%{"authorization" => []}],
@@ -61,7 +61,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def show_operation do
     %Operation{
       tags: ["activities"],
-      summary: "Get a activity by an ID",
+      summary: "Get activity",
       description: "Get a activity by an ID",
       operationId: "ActivityController.show",
       security: [%{"authorization" => []}],
@@ -105,7 +105,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def update_operation do
     %Operation{
       tags: ["activities"],
-      summary: "Update a specific activity",
+      summary: "Update activity",
       description: "Update a specific activity",
       operationId: "ActivityController.update",
       security: [%{"authorization" => []}],
@@ -160,7 +160,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def delete_operation do
     %Operation{
       tags: ["activities"],
-      summary: "Delete a specific activity",
+      summary: "Delete activity",
       description: "Delete a specific activity",
       operationId: "ActivityController.delete",
       security: [%{"authorization" => []}],
@@ -208,7 +208,7 @@ defmodule TripPlannerWeb.V1.Trips.ActivityController do
   def vote_operation do
     %Operation{
       tags: ["activities"],
-      summary: "Vote on a specific activity",
+      summary: "Vote on activity",
       description: "Vote on a specific activity",
       operationId: "ActivityController.vote",
       security: [%{"authorization" => []}],

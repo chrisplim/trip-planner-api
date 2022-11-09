@@ -51,7 +51,7 @@ defmodule TripPlannerWeb.V1.Users.UserController do
   def get_user_me_operation do
     %Operation{
       tags: ["users"],
-      summary: "Get current user information",
+      summary: "Get current user info",
       description: "Get current user information",
       operationId: "UserController.get_user_me",
       security: [%{"authorization" => []}],

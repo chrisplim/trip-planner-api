@@ -16,7 +16,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def index_operation do
     %Operation{
       tags: ["trips"],
-      summary: "Get all trips of current user",
+      summary: "Get all trips",
       description: "Get all trips of current user",
       operationId: "TripController.index",
       security: [%{"authorization" => []}],
@@ -43,7 +43,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def create_operation do
     %Operation{
       tags: ["trips"],
-      summary: "Create a trip",
+      summary: "Create trip",
       description: "Create a trip",
       operationId: "TripController.create",
       security: [%{"authorization" => []}],
@@ -77,7 +77,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def show_operation do
     %Operation{
       tags: ["trips"],
-      summary: "Get a trip by an ID",
+      summary: "Get trip",
       description: "Get a trip by an ID",
       operationId: "TripController.show",
       security: [%{"authorization" => []}],
@@ -113,7 +113,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def update_operation do
     %Operation{
       tags: ["trips"],
-      summary: "Update a specific trip",
+      summary: "Update trip",
       description: "Update a specific trip",
       operationId: "TripController.update",
       security: [%{"authorization" => []}],
@@ -157,7 +157,7 @@ defmodule TripPlannerWeb.V1.Trips.TripController do
   def delete_operation do
     %Operation{
       tags: ["trips"],
-      summary: "Delete a specific trip",
+      summary: "Delete trip",
       description: "Delete a specific trip",
       operationId: "TripController.delete",
       security: [%{"authorization" => []}],
