@@ -70,8 +70,17 @@ defmodule TripPlanner.Trips.TripsTest do
   describe "get_trip_with_activities_preloads" do
     test "trip exists" do
       user = insert(:user)
-      [activity, _] = activities = insert_pair(:activity)
-      insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
+      start_date = DateTime.utc_now()
+
+      [%{id: activity1_id} = activity1, %{id: activity2_id}, %{id: activity3_id}, %{id: activity4_id}] =
+        activities = [
+          insert(:activity, start_date: start_date, name: "c"),
+          insert(:activity, start_date: start_date, name: "d"),
+          insert(:activity, start_date: nil, name: "a"),
+          insert(:activity, start_date: nil, name: "b")
+        ]
+
+      insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
       trip = insert(:trip, activities: activities)
       trip_id = trip.id
 
@@ -81,8 +90,10 @@ defmodule TripPlanner.Trips.TripsTest do
                 users: [],
                 user: %User{},
                 activities: [
-                  %Activity{user: %User{}, is_interested: true},
-                  %Activity{user: %User{}, is_interested: nil}
+                  %Activity{id: ^activity1_id, user: %User{}, is_interested: true},
+                  %Activity{id: ^activity2_id, user: %User{}, is_interested: nil},
+                  %Activity{id: ^activity3_id, user: %User{}, is_interested: nil},
+                  %Activity{id: ^activity4_id, user: %User{}, is_interested: nil}
                 ]
               }} = Trips.get_trip_with_activities_preloads(user, trip_id)
     end
@@ -133,33 +144,49 @@ defmodule TripPlanner.Trips.TripsTest do
     test "user is the owner and participant of a few different trips" do
       user = insert(:user)
       second_user = insert(:user)
-      trip1 = insert(:trip, user: user, users: [second_user])
-      trip2 = insert(:trip, users: [user, second_user])
-      trip3 = insert(:trip, user: user, users: [user, second_user])
+
+      start_date = DateTime.utc_now()
+      inserted_at = DateTime.utc_now()
+
+      %{id: trip1_id} =
+        insert(:trip, user: user, users: [second_user], start_date: start_date, name: "b", inserted_at: inserted_at)
+
+      %{id: trip2_id} = insert(:trip, users: [user, second_user], name: "a")
+
+      [%{id: activity1_id} = activity1, %{id: activity2_id}, %{id: activity3_id}] =
+        activities = [
+          insert(:activity, start_date: nil, name: "1"),
+          insert(:activity, start_date: nil, name: "2"),
+          insert(:activity, start_date: start_date, name: "3")
+        ]
+
+      insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
+
+      %{id: trip3_id} =
+        insert(:trip,
+          user: user,
+          users: [user, second_user],
+          start_date: start_date,
+          name: "b",
+          inserted_at: DateTime.add(inserted_at, 1),
+          activities: activities
+        )
+
       # User isn't in trip4
       _trip4 = insert(:trip, users: [second_user])
 
-      assert {:ok, [%Trip{}, %Trip{}, %Trip{}] = results} = Trips.get_all_trips_including_user(user)
-      result_trip_ids = Enum.map(results, & &1.id)
-      assert_lists_equal(result_trip_ids, [trip1.id, trip2.id, trip3.id])
-    end
-
-    test "the activities preload" do
-      user = insert(:user)
-      [activity, _] = activities = insert_pair(:activity)
-      insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
-      trip = insert(:trip, users: [user], activities: activities)
-      trip_id = trip.id
-
       assert {:ok,
               [
+                %Trip{id: ^trip1_id},
                 %Trip{
-                  id: ^trip_id,
+                  id: ^trip3_id,
                   activities: [
-                    %Activity{user: %User{}, is_interested: true},
-                    %Activity{user: %User{}, is_interested: nil}
+                    %Activity{id: ^activity3_id, is_interested: nil},
+                    %Activity{id: ^activity1_id, is_interested: true},
+                    %Activity{id: ^activity2_id, is_interested: nil}
                   ]
-                }
+                },
+                %Trip{id: ^trip2_id}
               ]} = Trips.get_all_trips_including_user(user)
     end
   end

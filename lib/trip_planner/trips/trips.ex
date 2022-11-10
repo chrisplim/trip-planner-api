@@ -65,6 +65,7 @@ defmodule TripPlanner.Trips.Trips do
         left_join: participant in assoc(trip, :users),
         where: participant.id == ^user.id or user.id == ^user.id,
         group_by: [trip.id],
+        order_by: [asc_nulls_last: trip.start_date, asc: trip.name, asc: trip.inserted_at],
         preload: [:user, :users, activities: ^activity_preload_query]
       )
 
@@ -94,6 +95,7 @@ defmodule TripPlanner.Trips.Trips do
       left_join: user_activity_interest in UserActivityInterest,
       on: user_activity_interest.activity_id == activity.id and user_activity_interest.user_id == ^user.id,
       preload: [:user],
+      order_by: [asc_nulls_last: activity.start_date, asc: activity.name],
       select: %{activity | is_interested: user_activity_interest.is_interested}
     )
   end

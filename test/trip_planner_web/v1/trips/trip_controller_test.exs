@@ -6,14 +6,27 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
   alias TripPlanner.TypeConversions.DateTimeConverter
 
   describe "index" do
-    test "authenticated user, owner of trip", %{conn: conn} do
+    test "authenticated user", %{conn: conn} do
       user = insert(:user)
       user_id = user.id
-      %{id: activity_id} = activity = insert(:activity)
+      %{id: activity_id} = activity = insert(:activity, name: "a")
       insert(:user_activity_interest, activity: activity, user: user, is_interested: true)
-      trip = insert(:trip, user: user, users: [user], activities: [activity])
+      trip = insert(:trip, name: "a", user: user, users: [user], activities: [activity])
       trip_id = trip.id
       trip_name = trip.name
+
+      start_date = DateTime.utc_now()
+      %{id: activity2_id} = activity2 = insert(:activity, start_date: start_date, name: "y")
+      %{id: activity3_id} = activity3 = insert(:activity, start_date: start_date, name: "z")
+      %{id: activity4_id} = activity4 = insert(:activity, start_date: nil, name: "a")
+      %{id: activity5_id} = activity5 = insert(:activity, start_date: nil, name: "b")
+
+      %{id: trip2_id} =
+        insert(:trip, name: "b", users: [user], activities: [activity5, activity4, activity2, activity3])
+
+      trip_start = DateTime.utc_now()
+      insert(:trip, start_date: trip_start, name: "b")
+      %{id: trip4_id} = insert(:trip, users: [user], start_date: trip_start, name: "z")
 
       conn =
         conn
@@ -21,6 +34,7 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
         |> get(Routes.trip_path(conn, :index))
 
       assert [
+               %{"id" => ^trip4_id},
                %{
                  "id" => ^trip_id,
                  "name" => ^trip_name,
@@ -30,6 +44,15 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
                  "owner" => %{"id" => ^user_id},
                  "users" => [%{"id" => ^user_id}],
                  "activities" => [%{"id" => ^activity_id, "user" => %{}, "is_interested" => true}]
+               },
+               %{
+                 "id" => ^trip2_id,
+                 "activities" => [
+                   %{"id" => ^activity2_id},
+                   %{"id" => ^activity3_id},
+                   %{"id" => ^activity4_id},
+                   %{"id" => ^activity5_id}
+                 ]
                }
              ] = json_response(conn, 200)
     end
@@ -79,7 +102,7 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
       user_id = user.id
       {:ok, start_date} = DateTimeConverter.from_timestamp(1_664_848_505)
 
-      [activity1, activity2] = activities = insert_pair(:activity)
+      [activity1, activity2] = activities = [insert(:activity, name: "a"), insert(:activity, name: "b")]
       activity1_id = activity1.id
       activity2_id = activity2.id
       insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
@@ -172,7 +195,7 @@ defmodule TripPlannerWeb.V1.Trips.TripControllerTest do
       user = insert(:user)
       user_id = user.id
 
-      [activity1, activity2] = activities = insert_pair(:activity)
+      [activity1, activity2] = activities = [insert(:activity, name: "A"), insert(:activity, name: "B")]
       activity1_id = activity1.id
       activity2_id = activity2.id
       insert(:user_activity_interest, activity: activity1, user: user, is_interested: true)
