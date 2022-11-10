@@ -164,7 +164,6 @@ defmodule TripPlanner.Trips.TripsTest do
 
       %{id: trip3_id} =
         insert(:trip,
-          user: user,
           users: [user, second_user],
           start_date: start_date,
           name: "b",
