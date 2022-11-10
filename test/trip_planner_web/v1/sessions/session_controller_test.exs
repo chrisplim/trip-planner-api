@@ -87,4 +87,46 @@ defmodule TripPlannerWeb.V1.Sessions.SessionControllerTest do
       assert json_response(conn, 401) == %{"error" => %{"detail" => "unauthenticated"}}
     end
   end
+
+  describe "logout" do
+    test "authenticated user", %{conn: conn} do
+      user = insert(:user)
+
+      conn = authenticate(conn, user)
+
+      # Reload the user to get the jwt_refresh_token
+      user = TripPlanner.Repo.reload!(user)
+      refresh_token = user.jwt_refresh_token
+      params = %{refresh_token: refresh_token}
+
+      conn = post(conn, Routes.session_path(conn, :logout, params))
+
+      assert response(conn, 204)
+
+      # The jwt_refresh_token should be updated to nil
+      user = TripPlanner.Repo.reload!(user)
+      assert user.jwt_refresh_token == nil
+    end
+
+    @tag capture_log: true
+    test "authenticated user, but refresh_token passed in doesnt match", %{conn: conn} do
+      user = insert(:user)
+
+      conn = authenticate(conn, user)
+
+      params = %{refresh_token: "non matching token"}
+      conn = post(conn, Routes.session_path(conn, :logout, params))
+
+      assert json_response(conn, 401) == %{"error" => %{"detail" => "Unauthorized"}}
+    end
+
+    test "unauthenticated user", %{conn: conn} do
+      insert(:user, jwt_refresh_token: "some_token")
+
+      params = %{refresh_token: "some_token"}
+      conn = post(conn, Routes.session_path(conn, :logout, params))
+
+      assert json_response(conn, 401) == %{"error" => %{"detail" => "unauthenticated"}}
+    end
+  end
 end
