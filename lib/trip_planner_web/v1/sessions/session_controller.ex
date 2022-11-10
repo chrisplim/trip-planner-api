@@ -133,9 +133,8 @@ defmodule TripPlannerWeb.V1.Sessions.SessionController do
         %{"refresh_token" => refresh_token},
         %User{jwt_refresh_token: refresh_token} = user
       ) do
-    with {:ok, _} <- Auth.delete_token_for_user(user) do
-      send_resp(conn, 204, "")
-    else
+    case Auth.delete_token_for_user(user) do
+      {:ok, _} -> send_resp(conn, 204, "")
       _ -> {:error, :unauthorized}
     end
   end

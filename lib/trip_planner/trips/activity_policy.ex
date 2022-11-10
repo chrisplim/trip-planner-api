@@ -19,7 +19,8 @@ defmodule TripPlanner.Trips.ActivityPolicy do
     end
   end
 
-  # People in this trip can see, update, vote-on, and delete activities in this trip as long as the activity is in this trip
+  # People in this trip can see, update, vote-on, and delete activities
+  # in this trip as long as the activity is in this trip
   def authorize(action, %User{id: user_id}, %{
         trip: %Trip{id: trip_id, user: user, users: users},
         activity: %Activity{trip_id: trip_id}
