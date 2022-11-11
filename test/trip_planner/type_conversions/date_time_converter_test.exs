@@ -63,4 +63,79 @@ defmodule TripPlanner.TypeConversions.DateTimeConverterTest do
       assert DateTimeConverter.to_integer("asdf", :millisecond) == nil
     end
   end
+
+  describe "change_precision" do
+    test "microseconds to seconds" do
+      dt = DateTime.utc_now()
+      assert DateTimeConverter.change_precision(dt, :second) == DateTime.truncate(dt, :second)
+    end
+
+    test "microseconds to microseconds" do
+      dt = DateTime.utc_now()
+      assert DateTimeConverter.change_precision(dt, :microsecond) == dt
+    end
+  end
+
+  describe "convert_date_keys_in_map" do
+    test "start_date and end_date are convertible" do
+      start_ts = 1_668_135_674
+      end_ts = 1_668_135_688
+      expected_start = DateTime.from_unix!(start_ts)
+      expected_end = DateTime.from_unix!(end_ts)
+
+      map = %{"start_date" => start_ts, "end_date" => end_ts, "other_key" => "other val"}
+
+      assert DateTimeConverter.convert_date_keys_in_map(map) == %{
+               "start_date" => expected_start,
+               "end_date" => expected_end,
+               "other_key" => "other val"
+             }
+    end
+
+    test "start_date is convertible; end_date is not" do
+      start_ts = 1_668_135_674
+      end_ts = "bad value"
+      expected_start = DateTime.from_unix!(start_ts)
+
+      map = %{"start_date" => start_ts, "end_date" => end_ts, "other_key" => "other val"}
+
+      assert DateTimeConverter.convert_date_keys_in_map(map) == %{
+               "start_date" => expected_start,
+               "end_date" => "bad value",
+               "other_key" => "other val"
+             }
+    end
+
+    test "start_date is convertible; end_date is missing" do
+      start_ts = 1_668_135_674
+      expected_start = DateTime.from_unix!(start_ts)
+
+      map = %{"start_date" => start_ts, "other_key" => "other val"}
+
+      assert DateTimeConverter.convert_date_keys_in_map(map) == %{
+               "start_date" => expected_start,
+               "other_key" => "other val"
+             }
+    end
+
+    test "start_date is missing; end_date is convertible;" do
+      end_ts = 1_668_135_674
+      expected_end = DateTime.from_unix!(end_ts)
+
+      map = %{"end_date" => end_ts, "other_key" => "other val"}
+
+      assert DateTimeConverter.convert_date_keys_in_map(map) == %{
+               "end_date" => expected_end,
+               "other_key" => "other val"
+             }
+    end
+
+    test "both start_date and end_date are missing" do
+      map = %{"other_key" => "other val"}
+
+      assert DateTimeConverter.convert_date_keys_in_map(map) == %{
+               "other_key" => "other val"
+             }
+    end
+  end
 end
